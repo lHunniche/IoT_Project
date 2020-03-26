@@ -63,7 +63,7 @@ def submitColor():
 def getColor():
     global has_color_update
     _body = body(request)
-    board_id = _body.get("board_id")
+    board_id = _body.get(board_id)
     board = board_dict.get(board_id)
     if board == None:
         return "GetColor - No board available with that ID."
