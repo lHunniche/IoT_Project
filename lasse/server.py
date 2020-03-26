@@ -40,7 +40,7 @@ def index():
 # colors are defined by an RGB value (255,255,255)
 # possible settings include color intensity, and temperature
 # SUBMIT NEW COLOR FOR BOARD
-@app.route("/submitcolor", methods=["POST", "GET"])
+@app.route("/submitcolor", methods=["POST"])
 def submit_color():
     global has_color_update, board_dict
     _body = body(request)
