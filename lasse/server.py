@@ -7,7 +7,7 @@ from polling import LongPolling
 app = Flask(__name__)
 has_color_update = True
 board_dict = dict()
-long_polling = LongPolling()
+long_polling = LongPolling(10)
 
 
 # when boards are initted they should make a request to this endpoint
