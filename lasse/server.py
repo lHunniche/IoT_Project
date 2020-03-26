@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 import time
-from lasse.board import Board
-from lasse.polling import LongPolling
+from board import Board
+from polling import LongPolling
 
 
 app = Flask(__name__)
