@@ -53,7 +53,7 @@ def submit_color():
     if board == None:
         return "SubmitColor - No board available with that ID."
 
-    board.color = {"red" : red, "green" : green, "blue" : blue}
+    board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board_dict[board_id] = board
 
     has_color_update = True
