@@ -19,4 +19,4 @@ class LongPolling:
         polling_addresses = new_pollers
 
     def add_poller(self, poller):
-        self.polling_addresses.append((poller, time.time()+poll_renew))
+        self.polling_addresses.append((poller, time.time()+self.poll_renew))
