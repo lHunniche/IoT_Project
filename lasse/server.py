@@ -46,7 +46,7 @@ def submitColor():
     red = _body.get("red")
     green = _body.get("green")
     blue = _body.get("blue")
-    board_id = body.get("board_id")
+    board_id = body.get(board_id)
 
     board = board_dict.get(board_id)
     if board == None:
@@ -60,7 +60,7 @@ def submitColor():
 
 # this message 
 @app.route("/getcolor", methods=["GET"])
-def getColorChange():
+def getColor():
     global has_color_update
     _body = body(request)
     board_id = _body.get("board_id")
