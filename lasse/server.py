@@ -52,7 +52,7 @@ def submitColor():
     if board == None:
         return "SubmitColor - No board available with that ID."
 
-    board.light = (red, green, blue)
+    board.color = {"red" : red, "green" : green, "blue" : blue}
     board_dict[board_id] = board
 
     has_color_update = True
@@ -85,9 +85,8 @@ def getColorChange():
     else:
         long_polling.add_poller(board_id)
     
-    board_j = board.__dict__
     has_color_update = False
-    return jsonify(board_j)
+    return jsonify(board.color)
 
 
 

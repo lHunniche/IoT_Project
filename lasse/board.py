@@ -1,7 +1,7 @@
 class Board:
     def __init__(self, board_id):
         self.board_id = board_id
-        self.light = (255,255,255)
+        self.color = {"red": 255, "green": 255, "blue": 255}
 
 
     def __str__(self):
