@@ -67,6 +67,7 @@ def get_color():
     global has_color_update
     _body = body(request)
     board_id = _body.get("board_id")
+
     board = board_dict.get(board_id)
     if board == None:
         return "GetColor - No board available with that ID."
@@ -104,6 +105,13 @@ def submit_light():
 
 def body(request):
     return request.get_json()
+
+@app.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Headers'] = "*"
+
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True)
