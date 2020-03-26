@@ -20,7 +20,7 @@ def init_board():
     new_board = Board(board_id)
 
     if board_dict.get(board_id) is not None:
-        return board_id + " already initted."
+        return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
     return str(board_id) + " initted."
