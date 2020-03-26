@@ -93,7 +93,9 @@ def getColor():
 @app.route("/submitlight", methods=["POST"])
 def submitLight():
     _body = body(request)
-    pass
+    global has_color_update
+    has_color_update = True
+    return "Submit light"
 
 def body(request):
     return request.get_json()
