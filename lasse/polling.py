@@ -2,7 +2,7 @@ import time
 
 class LongPolling:
     def __init__(self):
-        polling_addresses = []
+        self.polling_addresses = []
 
     def is_polling(self, poller):
         for element in self.polling_addresses:
