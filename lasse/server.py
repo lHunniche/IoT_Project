@@ -79,7 +79,6 @@ def get_color():
         while wait_counter < 30:
             if has_color_update:
                 break
-            print("Waiting for new color...")
             time.sleep(2)
             wait_counter += 1
         if not has_color_update:
