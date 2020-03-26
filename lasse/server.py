@@ -47,7 +47,7 @@ def submit_color():
     red = _body.get("red")
     green = _body.get("green")
     blue = _body.get("blue")
-    board_id = body.get("board_id")
+    board_id = _body.get("board_id")
 
     board = board_dict.get(board_id)
     if board == None:
