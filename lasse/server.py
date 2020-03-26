@@ -39,8 +39,9 @@ def index():
 # Board ID must be submitted along with the request
 # colors are defined by an RGB value (255,255,255)
 # possible settings include color intensity, and temperature
+# SUBMIT NEW COLOR FOR BOARD
 @app.route("/submitcolor", methods=["POST", "GET"])
-def submitColor():
+def submit_color():
     global has_color_update, board_dict
     _body = body(request)
     red = _body.get("red")
@@ -58,9 +59,11 @@ def submitColor():
     has_color_update = True
     return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + ")"
 
-# this message 
+
+
+# GET COLOR
 @app.route("/getcolor", methods=["POST"])
-def getColor():
+def get_color():
     global has_color_update
     _body = body(request)
     board_id = _body.get("board_id")
@@ -91,11 +94,12 @@ def getColor():
 
 
 
+# SUBMIT LIGHT SENSED BY BOARD
 @app.route("/submitlight", methods=["POST"])
-def submitLight():
-    _body = body(request)
+def submit_light():
     global has_color_update
-    has_color_update = True
+    _body = body(request)
+    
     return "Submit light"
 
 def body(request):

@@ -16,7 +16,7 @@ class LongPolling:
         for poller in self.polling_addresses:
             if poller[1] > time.time():
                 new_pollers.append(poller)
-        polling_addresses = new_pollers
+        self.polling_addresses = new_pollers
 
     def add_poller(self, poller):
         self.polling_addresses.append((poller, time.time()+self.poll_renew))
