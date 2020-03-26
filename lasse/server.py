@@ -16,6 +16,7 @@ def init_board():
     global board_dict
     _body = body(request)
     board_id = _body.get("board_id")
+    print("Trying to init: " + str(board_id))
     new_board = Board(board_id)
 
     if new_board in board_dict:
