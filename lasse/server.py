@@ -99,7 +99,9 @@ def get_color():
 def submit_light():
     global has_color_update
     _body = body(request)
-    
+    board_id = _body.get("board_id")
+    light = _body.get("light")
+    log_file = open("lightlog.csv", "a")
     return "Submit light"
 
 def body(request):
@@ -109,8 +111,11 @@ def body(request):
 def after_request(response):
     response.headers['Access-Control-Allow-Origin'] = "*"
     response.headers['Access-Control-Allow-Headers'] = "*"
-
     return response
+
+@app.route("/boards", methods=["GET"])
+def get_boards():
+    return jsonify(list(board_dict.keys()))
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True)
