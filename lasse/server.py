@@ -59,11 +59,11 @@ def submitColor():
     return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + ")"
 
 # this message 
-@app.route("/getcolor", methods=["GET"])
+@app.route("/getcolor", methods=["POST"])
 def getColor():
     global has_color_update
     _body = body(request)
-    board_id = _body.get(board_id)
+    board_id = _body.get("board_id")
     board = board_dict.get(board_id)
     if board == None:
         return "GetColor - No board available with that ID."
