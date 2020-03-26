@@ -23,7 +23,7 @@ def init_board():
         return board_id + " already initted."
 
     board_dict[board_id] = new_board
-    return board_id + " initted."
+    return str(board_id) + " initted."
 
 
 
@@ -56,7 +56,7 @@ def submitColor():
     board_dict[board_id] = board
 
     has_color_update = True
-    return "Board with ID " + board_id + " has following color: (" + red + ", " + green + ", " + blue + ")"
+    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + ")"
 
 # this message 
 @app.route("/getcolor", methods=["GET"])
