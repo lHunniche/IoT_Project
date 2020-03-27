@@ -1,7 +1,10 @@
 body {
     font-family: 'Open Sans', sans-serif;
 }
-h1{
+#title{
+  margin-bottom: 0px;
+  background-color: #003747;
+  padding-bottom: 2%;
   font-size: 5rem;
   color: #31A9b8;
   margin-top: 0px;
@@ -10,12 +13,25 @@ h1{
   text-decoration: #31A9b8 double underline;
 }
 
+.board-options-container {
+  border:5px solid beige;
+  background-color: #2a6495;
+}
+
+.chart-container {
+  border: 3px solid beige;
+  background-color: beige;
+}
+
 
 .container{
   text-align: center;
 }
 
  #color-change-container{
+   border: 3px solid beige;
+   margin-top: 0px;
+   background-color: goldenrod;
    float:left;
    padding: 5%;
 
