@@ -9,8 +9,6 @@ h1{
 }
 
 .content{
-  width: 889px;
-  height:1200px;
   position: absolute;
   top:0px;
   left:0px;
@@ -23,21 +21,9 @@ h1{
  #color-change-container{
    float:left;
    padding: 5%;
-  max-width: 400px;
-  min-height: 500px;
+
  }
 
- canvas {
-  max-width: 400px;
-  max-height: 250px;
- }
-
- #chart-container {
-  float:right;
-  max-width: 400px;
-  max-height: 250px;
-  background-color: blanchedalmond;
- }
 
 
 /* RADIO BUTTONS */
