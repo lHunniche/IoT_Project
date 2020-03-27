@@ -4,38 +4,63 @@ body {
 
 .container{
   margin-left: 5%;
- border: 1px solid black;
  width: 45%;
  padding: 5%;
 }
 
-.marker {
- background-color: black;
- width: 20px;
- height: 20px;
- display: inline-block
-}
 
-#sliders-container {
-    display: inline-block;
-}
+/* RADIO BUTTONS */
 
 .radio-container{
     margin-top: 1%;
 }
 
-.slider {
-    margin-top:8%;
-    border-radius: 10px;
-    padding-left: 1.5rem;
-    width: 10rem;
+.radio-group{
+  text-align: center;
+  position: relative;
+  padding: 2%;
 }
+
+.radio{
+  display:inline-block;
+  background-color:goldenrod;
+  border: 1px solid white;
+  cursor:pointer;
+  margin: 2px;
+  margin-left: 2%; 
+  margin-top: 2.1%;
+  padding: 3%;
+  border-radius: 10px;
+  transition: ease-in-out .3s;
+}
+
+.radio:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.radio.selected{
+  color: goldenrod;
+  border: .8px solid black;
+  background-color: black;
+}
+
+
+/*______________*/
+
+
+
+
+/* PREVIEW BOX */
+
+
 #rgb-preview{
     border-radius: 10px;
-    height: 15rem;
-    width: 25.5rem;
+    height:10rem;
+    width: 100%;
     margin-top: 65px;
     background-color: black;
+    border: 0.5px solid white;
 }
 
 #rgb-preview:hover{
@@ -45,17 +70,35 @@ body {
 #hover-preview{
     color: white;
     text-align: center;
-    padding-top: 22%;
+    padding-top: 15%;
     font-size: 30px;
     border-radius: 10px;
-    height: 9.3rem;
-    width: 25.4rem;
+    height: 50%;
+    width: 50%rem;
     opacity: 0;
     transition: .4s ease-in-out;
 }
 #hover-preview:hover{
     opacity: 1;
 }
+
+
+/*_____________________*/
+
+
+/* INPUT RANGE SLIDERS */
+
+.slider {
+  margin-top:8%;
+  border-radius: 10px;
+  padding-left: 1.5rem;
+  width: 10rem;
+}
+
+#sliders-container {
+  display: inline-block;
+}
+
 
 input[type=range] {
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */

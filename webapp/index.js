@@ -1,45 +1,40 @@
-function docReady(fn) {
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-        setTimeout(fn, 1);
-    } else {
-        document.addEventListener("DOMContentLoaded", fn);
-    }
-}   
+$(document).ready(function () {
 
 
-docReady(function() {
-    
-    let addEventListeners = () => {
-        document.getElementById("range-red").addEventListener("input", updatePreview)
-        document.getElementById("range-green").addEventListener("input", updatePreview)
-        document.getElementById("range-blue").addEventListener("input", updatePreview)
-        document.getElementById("hover-preview").addEventListener('click', submitColor)
-    }
+    let selected = -1
 
     let addBoards = (boards) => {
-        let boardContainer = document.getElementById("board-radio-btns")
-        for(i = 0; i < boards.length; i++) {
+        let boardContainer = document.getElementById("radio-group-boards")
+        for (i = 0; i < boards.length; i++) {
             addBoard(boardContainer, boards[i])
-        }   
+        }
+        addDummyBoards(boardContainer)
+        selectFirstBoard()
+    }
+
+    let selectFirstBoard = () => {
+        let boardContainer = document.getElementById("radio-group-boards")
+        let firstChild = boardContainer.firstChild
+        firstChild.setAttribute("class", "radio selected")
+        selected = firstChild.getAttribute("data-value")
+
+    }
+
+    let addDummyBoards = (boardContainer) => {
+        let bogusIds = [5, 10, 8, 11, 7, 3, 9]
+        for (id of bogusIds) {
+            addBoard(boardContainer, id)
+        }
     }
 
     let addBoard = (boardContainer, id) => {
-        let container = document.createElement("div")
-        container.setAttribute("class", "radio-container")
-        let radio = document.createElement('input')
-        radio.setAttribute("type", "radio")
-        radio.setAttribute("id", id)
-        radio.setAttribute("name", "board")
-        radio.setAttribute("class", "board-radio")
-        let label = document.createElement("label")
-        label.setAttribute("for", id)
-        let idTxtNode = document.createTextNode("Board " + id)
-        label.appendChild(idTxtNode)
-        container.appendChild(radio)
-        container.appendChild(label)
-        boardContainer.appendChild(container)
+        let radio = document.createElement("div")
+        radio.setAttribute("class", "radio")
+        radio.setAttribute("data-value", id)
+        let radioText = document.createTextNode("Board " + id)
+        radio.appendChild(radioText)
+        boardContainer.appendChild(radio)
     }
-
     let initBoards = () => {
         fetch('http://klevang.dk:19409/boards')
             .then((response) => {
@@ -47,7 +42,7 @@ docReady(function() {
             })
             .then((data) => {
                 addBoards(data)
-             });
+            }).then(addEventListeners);
     }
 
     let updatePreview = () => {
@@ -55,54 +50,67 @@ docReady(function() {
         let r = document.getElementById("range-red").value
         let g = document.getElementById("range-green").value
         let b = document.getElementById("range-blue").value
-        let previewBG = "rgb("+r+","+g+","+b+")"
-        console.log(previewBG)
+        let previewBG = "rgb(" + r + "," + g + "," + b + ")"
         preview.style.backgroundColor = previewBG
     }
-
-    let getCheckedId = () => {
-        let inputs = document.getElementsByClassName("board-radio")
-        for(i = 0; i < inputs.length; i++) {
-            if(inputs[i].checked) {
-                return parseInt(inputs[i].id)
-            }
-        }
-        
-        //.filter(input => input.checked)[0]
-    }
-
 
     let submitColor = () => {
         let r = parseInt(document.getElementById("range-red").value)
         let g = parseInt(document.getElementById("range-green").value)
         let b = parseInt(document.getElementById("range-blue").value)
-        let boardID = getCheckedId()
+        let boardID = parseInt(selected)
         let data = {
             "board_id": boardID,
             "red": r,
             "green": g,
-            "blue":b
+            "blue": b
         }
         console.log(data)
         fetch('http://klevang.dk:19409/submitcolor', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
     }
+
+    let initPreviewListener = () => {
+        document.getElementById("hover-preview").addEventListener('click', submitColor)
+    }
+
+    let initRangeSliderListeners = () => {
+        document.getElementById("range-red").addEventListener("input", updatePreview)
+        document.getElementById("range-green").addEventListener("input", updatePreview)
+        document.getElementById("range-blue").addEventListener("input", updatePreview)
+    }
+    let initRadioEventListener = () => {
+        $('.radio-group .radio').click(function () {
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
+            var val = $(this).attr('data-value');
+            selected = val
+        });
+    }
+
+    let addEventListeners = () => {
+        initRadioEventListener()
+        initRangeSliderListeners()
+        initPreviewListener()
+    }
+
     updatePreview()
-    addEventListeners()
     initBoards()
-   
+
 
 });
 
