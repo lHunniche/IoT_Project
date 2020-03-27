@@ -9,6 +9,7 @@ body {
   color: #31A9b8;
   margin-top: 0px;
   text-align: center;
+  border-bottom: 3px solid beige;
   -webkit-text-decoration: #31A9b8 double underline;
   text-decoration: #31A9b8 double underline;
 }
