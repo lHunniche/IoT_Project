@@ -1,4 +1,6 @@
 body {
+    color: beige;
+    background-color: beige;
     font-family: 'Open Sans', sans-serif;
 }
 #title{
@@ -14,7 +16,7 @@ body {
   text-decoration: #31A9b8 double underline;
 }
 h1{
-  color:white;
+  color:beige;
 }
 
 .board-options-container {
@@ -56,10 +58,10 @@ h1{
 }
 
 .radio{
-  color: white;
+  color: beige;
   display:inline-block;
   background-color:#31A9b8;
-  border: 1px solid white;
+  border: 1px solid beige;
   cursor:pointer;
   margin: 2px;
   margin-left: 2%; 
@@ -80,7 +82,7 @@ h1{
 
 .radio.selected{
   border-radius: 0px;
-  color: white;
+  color: beige;
   border: .8px solid black;
   background-color: black;
 }
