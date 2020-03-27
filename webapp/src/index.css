@@ -2,6 +2,8 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 h1{
+  font-size: 5rem;
+  color: #31A9b8;
   margin-top: 0px;
   text-align: center;
   -webkit-text-decoration: #31A9b8 double underline;
@@ -118,7 +120,7 @@ h1{
   margin-top:8%;
   border-radius: 10px;
   padding-left: 1.5rem;
-  width: 10rem;
+  width: 100%;
 }
 
 #sliders-container {
