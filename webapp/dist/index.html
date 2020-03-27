@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lighthearted Light Bulb</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <!-- <script src="index.js"></script> -->
+
+    <link rel="stylesheet" type="text/css" href="../src/index.css">
+</head>
+
+<body>
+
+
+    <!--<input type="text" id="board-id-input" placeholder="board id...">-->
+    <div class="content">
+        <div class="container" id="color-change-container">
+            <h1 id="title">Lighthearted Light Bulb</h1>
+
+            <form class="radio-group" id="radio-group-boards"></form>
+            <div id="sliders-container">
+                <input type="range" id="range-red" name="vol" min="0" max="255">
+
+                <input type="range" id="range-green" name="vol" min="0" max="255">
+
+                <input type="range" id="range-blue" name="vol" min="0" max="255">
+
+            </div>
+            <div id="rgb-preview">
+                <div id="hover-preview">Set Color</div>
+            </div>
+
+
+        </div>
+        <!--
+        <div class="container" id="chart-container"><canvas id="my-chart"></canvas></div>
+    -->
+    </div>
+</body>
+
+
+<script src="main.js"></script>
+
+</html>
