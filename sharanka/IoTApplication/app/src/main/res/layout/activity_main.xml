@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
-        android:text="Red:" />
-
-    <TextView
-        android:id="@+id/RTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
-        android:text="0"
-        android:textSize="15sp" />
+        android:layout_marginStart="124dp"
+        android:layout_marginLeft="124dp"
+        android:layout_marginTop="448dp"
+        android:text="Send Post Request"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/RProgressBar"
@@ -31,37 +30,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginLeft="-3dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginBottom="220dp" />
-
-    <SeekBar
-        android:id="@+id/RSeekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginLeft="-3dp"
-        android:layout_marginTop="107dp" />
-
-    <TextView
-        android:id="@+id/gTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
-        android:text="0"
-        android:textSize="15sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:text="Green:" />
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="221dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/GProgressBar"
@@ -72,31 +45,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="200dp" />
-
-    <SeekBar
-        android:id="@+id/GSeekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="252dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="340dp"
-        android:text="Blue:" />
-
-    <TextView
-        android:id="@+id/BTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="0"
-        android:textSize="15sp" />
+        android:layout_marginTop="302dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-40dp" />
 
     <ProgressBar
         android:id="@+id/BProgressBar"
@@ -106,7 +57,34 @@
         android:layout_above="@+id/BSeekbar"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="387dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/RSeekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="221dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-37dp" />
+
+    <SeekBar
+        android:id="@+id/GSeekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="302dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <SeekBar
         android:id="@+id/BSeekbar"
@@ -115,7 +93,79 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="322dp" />
+        android:layout_marginTop="385dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="187dp"
+        android:text="Red:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/RTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="187dp"
+        android:layout_marginLeft="187dp"
+        android:layout_marginTop="186dp"
+        android:text="0"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="187dp"
+        android:layout_marginLeft="187dp"
+        android:layout_marginTop="275dp"
+        android:text="0"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="276dp"
+        android:text="Green:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="366dp"
+        android:text="Blue:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/BTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="187dp"
+        android:layout_marginLeft="187dp"
+        android:layout_marginTop="365dp"
+        android:text="0"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

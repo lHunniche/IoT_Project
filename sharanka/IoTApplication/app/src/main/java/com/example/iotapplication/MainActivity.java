@@ -7,6 +7,8 @@ import retrofit2.Response;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private IRetrofitClient retrofitClient;
     private int red, green, blue;
     private TextView rText, gText, bText;
+    private Button button;
     private ProgressBar rProgressBar, gProgressBar, bProgressBar;
     private SeekBar rSeekbar, gSeekBar, bSeekbar;
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         retrofitClient = Utils.getRetrofitClient();
+        button = (Button) findViewById(R.id.button);
 
         rText = (TextView) findViewById(R.id.RTextView);
         rProgressBar = (ProgressBar) findViewById(R.id.RProgressBar);
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 red = i;
                 seekBar.setMax(255);
                 rText.setText("" + i);
-                sendPost(2, red, green, blue);
             }
 
             @Override
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 blue = i;
                 seekBar.setMax(255);
                 gText.setText("" + i);
-                sendPost(2, red, green, blue);
             }
 
             @Override
@@ -76,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 green = i;
                 seekBar.setMax(255);
                 bText.setText("" + i);
-                sendPost(2, red, green, blue);
             }
 
             @Override
@@ -84,6 +85,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendPost(2, red, green, blue);
+            }
         });
     }
 
@@ -93,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<RGBModel> call, Response<RGBModel> response) {
                 if(response.isSuccessful()) {
                     Log.i(TAG, "Post request went through successfully. " + response.body().toString());
-                }
+                }g
             }
 
             @Override

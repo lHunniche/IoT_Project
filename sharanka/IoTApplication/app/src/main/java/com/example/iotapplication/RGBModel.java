@@ -1,13 +1,14 @@
 package com.example.iotapplication;
 
-import java.util.Map;
-
 public class RGBModel {
-    private Map<String, Integer> dict;
     private Integer board_id;
     private Integer red;
     private Integer green;
     private Integer blue;
+
+    public int getId() { return board_id; }
+
+    public void setBoard_id(Integer board_id) { this.board_id = board_id; }
 
     public int getRed() {
         return red;
