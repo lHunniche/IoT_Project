@@ -8,7 +8,7 @@ $(document).ready(function () {
         for (i = 0; i < boards.length; i++) {
             addBoard(boardContainer, boards[i])
         }
-        addDummyBoards(boardContainer)
+        //addDummyBoards(boardContainer)
         selectFirstBoard()
     }
 
