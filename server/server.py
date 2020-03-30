@@ -96,6 +96,7 @@ def get_color():
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
     board_id = int(request.args.get("board_id"))
+    print(type(board_id))
     board = board_dict.get(board_id)
 
     if board == None:
