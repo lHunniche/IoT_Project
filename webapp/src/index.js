@@ -8,6 +8,8 @@ $(document).ready(function () {
         for (i = 0; i < boards.length; i++) {
             addBoard(boardContainer, boards[i])
         }
+        console.log("BOARDS: " + boards)
+        setBoardsColors(boards)
         addDummyBoards(boardContainer)
         selectFirstBoard()
     }
@@ -22,8 +24,6 @@ $(document).ready(function () {
 
     let addDummyBoards = (boardContainer) => {
         element = document.getElementById('rgb-preview');
-        bgColor = window.getComputedStyle(element, null).getPropertyValue('background-color');
-        
         let bogusIds = [5, 10, 8, 11, 7, 3, 9]
         for (id of bogusIds) {
             addBoard(boardContainer, id)
@@ -33,10 +33,31 @@ $(document).ready(function () {
     let addBoard = (boardContainer, id) => {
         let radio = document.createElement("div")
         radio.setAttribute("class", "radio")
+        radio.setAttribute("id", id)
         radio.setAttribute("data-value", id)
-        let radioText = document.createTextNode("Board " + id)
+        let radioText = document.createTextNode("💡" + id)
         radio.appendChild(radioText)
         boardContainer.appendChild(radio)
+    }
+
+    let setBoardsColors = (boards) => {
+        for(boardId of boards) {
+            fetchBoardColor(boardId)
+        }
+    }
+
+    let fetchBoardColor = (boardid) => {
+        fetch("http://klevang.dk:19409/getcurrentcolor?board_id="+boardid)
+        .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            setBoardColor(boardid, data)
+          });
+    }
+    let setBoardColor = (boardId, color) => {
+        let boardRadioBtn = document.getElementById(boardId)
+        boardRadioBtn.style.backgroundColor = "rgb("+color['r'], +","+color['g']+","+color['b']+")"   
     }
 
 
