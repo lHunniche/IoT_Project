@@ -96,8 +96,9 @@ def get_color():
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
     board_id = request.args.get("board_id")
-
+    print(type(board_id))
     board = board_dict.get(board_id)
+
     if board == None:
         return "GetCurrentColor - No board available with that ID."
     return jsonify(board.color)
@@ -128,4 +129,4 @@ def get_boards():
     return jsonify(list(board_dict.keys()))
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8081, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
