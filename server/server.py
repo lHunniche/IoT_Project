@@ -93,6 +93,16 @@ def get_color():
     return jsonify(board.color)
 
 
+@app.route("/getcurrentcolor", methods=["GET"])
+def get_color_once():
+    board_id = request.args.get("board_id")
+
+    board = board_dict.get(board_id)
+    if board == None:
+        return "GetCurrentColor - No board available with that ID."
+    return jsonify(board.color)
+
+
 
 # SUBMIT LIGHT SENSED BY BOARD
 @app.route("/submitlight", methods=["POST"])
