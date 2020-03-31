@@ -30,15 +30,13 @@ h1{
 }
 
 
-.container{
-  text-align: center;
-}
+
 
  #color-change-container{
+   text-align: center;;
    border: 3px solid beige;
    margin-top: 0px;
    background-color: #065465;
-   float:left;
    padding: 5%;
 
  }
@@ -84,8 +82,7 @@ h1{
 .radio.selected{
   border-radius: 0px;
   color: beige;
-  border: .8px solid black;
-  background-color: black;
+  border: 4px solid beige;
 }
 
 
