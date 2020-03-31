@@ -74,6 +74,7 @@ def get_color():
     if long_polling.is_polling(board_id):
         wait_counter = 0
         while wait_counter < 30:
+            print(board_id + ": waiting for new color...")
             if has_color_update:
                 break
             time.sleep(2)
