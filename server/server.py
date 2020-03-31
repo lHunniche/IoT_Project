@@ -29,15 +29,6 @@ def init_board():
     return jsonify(temp_dict)
 
 
-
-# delete later...
-@app.route("/", methods=["GET"])
-def index():
-    body = request.get_json()
-    return "Jep"
-
-
-
 # sends color from Android App to web server. 
 # Board ID must be submitted along with the request
 # colors are defined by an RGB value (255,255,255)
@@ -64,7 +55,7 @@ def submit_color():
 
 
 
-# GET COLOR
+# GET COLOR OF BOARD !-WITH-! LONG POLLING
 @app.route("/getcolor", methods=["POST"])
 def get_color():
     global has_color_update
@@ -96,6 +87,7 @@ def get_color():
     return jsonify(board.color)
 
 
+# GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
     board_id = request.args.get("board_id")
@@ -107,25 +99,21 @@ def get_color_once():
 
 
 
-# SUBMIT LIGHT SENSED BY BOARD
+# SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
 @app.route("/submitlight", methods=["POST"])
 def submit_light():
     global has_color_update
-    #_body = body(request)
-    #board_id = _body.get("board_id")
-    #light = _body.get("light")
-    #log_file = open("lightlog.csv", "a")
-    return "Submit light - not implemented"
+    _body = body(request)
+    board_id = _body.get("board_id")
+    light = _body.get("light")
+    log_file = open("lightlog.csv", "a")
+    log_file.write(light + "," + time.time_ns())
+    log_file.close()
+    return "Submit light"
 
-def body(request):
-    return request.get_json()
 
-@app.after_request
-def after_request(response):
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Access-Control-Allow-Headers'] = "*"
-    return response
-
+# GET A COMPLETE LIST OF ALL BOARDS
+# TAKES A SECRET AS ARGUMENT AS SECURITY MEASURE
 @app.route("/boards", methods=["GET"])
 def get_boards():
     secret_file = open("pie.txt", "r")
@@ -139,6 +127,21 @@ def get_boards():
         "boards": boards_j
     }
     return jsonify(boards_json)
+
+
+
+'''
+Helper methods below here.
+Adds some nice headers, and method to easy access body of request
+'''
+@app.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Headers'] = "*"
+    return response
+
+def body(request):
+    return request.get_json()
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
