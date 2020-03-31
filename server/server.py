@@ -128,7 +128,7 @@ def after_request(response):
 @app.route("/boards", methods=["GET"])
 def get_boards():
     
-    boards_j = [board.__dict__ for child in list(board_dict.values())]
+    boards_j = [board.__dict__ for board in list(board_dict.values())]
     boards_json = {
         "boards": boards_j
     }
