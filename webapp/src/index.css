@@ -29,6 +29,28 @@ h1{
   background-color: #06768d
 }
 
+.lightbulb-image-container{
+  background-image: url("https://www.aier.org/wp-content/uploads/2019/09/lightbulb.jpg");
+	background-position:center;
+	background-repeat:no-repeat;
+  background-size:cover;
+  text-align: center;
+  padding:10%;
+  border: 3px solid beige;
+  background-color: #06768d
+}
+
+.other-products-container {
+  background-image: url("https://scm.dk/sites/default/files/styles/2400px/public/IMP49809215_l.jpg?itok=lr58DvzN.jpg");
+  background-position:center;
+	background-repeat:no-repeat;
+  background-size:cover;
+  text-align: center;
+  padding:10%;
+  border: 3px solid beige;
+  background-color: #06768d
+}
+
 
 
 
