@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-import time
+import time, string, random
 from board import Board
 from polling import LongPolling
 
@@ -15,15 +15,17 @@ long_polling = LongPolling(10)
 def init_board():
     global board_dict
     _body = body(request)
-    board_id = _body.get("board_id")
-    print("Trying to init: " + str(board_id))
-    new_board = Board(board_id)
+    board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+    board_name = _body.get("name")
+
+    new_board = Board(board_id, board_name)
 
     if board_dict.get(board_id) is not None:
         return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
-    return str(board_id) + " initted."
+    
+    return board_id
 
 
 
@@ -95,8 +97,7 @@ def get_color():
 
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
-    board_id = int(request.args.get("board_id"))
-    print(type(board_id))
+    board_id = request.args.get("board_id")
     board = board_dict.get(board_id)
 
     if board == None:
@@ -126,7 +127,13 @@ def after_request(response):
 
 @app.route("/boards", methods=["GET"])
 def get_boards():
-    return jsonify(list(board_dict.keys()))
+    
+    boards_j = [board.__dict__ for child in list(board_dict.values())]
+    boards_json = {
+        "boards": boards_j
+    }
+    return jsonify(boards_json)
+    #return jsonify(list(board_dict.keys()))
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
