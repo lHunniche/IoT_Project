@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-import time
+import time, string, random
 from board import Board
 from polling import LongPolling
 
@@ -15,24 +15,21 @@ long_polling = LongPolling(10)
 def init_board():
     global board_dict
     _body = body(request)
-    board_id = _body.get("board_id")
-    print("Trying to init: " + str(board_id))
-    new_board = Board(board_id)
+    board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+    board_name = _body.get("name")
+    print("Submitted name: ", board_name)
+
+    new_board = Board(board_id, board_name)
 
     if board_dict.get(board_id) is not None:
+        print("Tried to init already initted board.")
         return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
-    return str(board_id) + " initted."
-
-
-
-# delete later...
-@app.route("/", methods=["GET"])
-def index():
-    body = request.get_json()
-    return "Jep"
-
+    temp_dict = dict()
+    temp_dict["board_id"] = board_id
+    print("All went well!")
+    return jsonify(temp_dict)
 
 
 # sends color from Android App to web server. 
@@ -61,7 +58,7 @@ def submit_color():
 
 
 
-# GET COLOR
+# GET COLOR OF BOARD !-WITH-! LONG POLLING
 @app.route("/getcolor", methods=["POST"])
 def get_color():
     global has_color_update
@@ -93,18 +90,19 @@ def get_color():
     return jsonify(board.color)
 
 
+# GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
     board_id = request.args.get("board_id")
-
     board = board_dict.get(board_id)
+
     if board == None:
         return "GetCurrentColor - No board available with that ID."
     return jsonify(board.color)
 
 
 
-# SUBMIT LIGHT SENSED BY BOARD
+# SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
 @app.route("/submitlight", methods=["POST"])
 def submit_light():
     global has_color_update
@@ -112,20 +110,41 @@ def submit_light():
     board_id = _body.get("board_id")
     light = _body.get("light")
     log_file = open("lightlog.csv", "a")
+    log_file.write(light + "," + time.time_ns())
+    log_file.close()
     return "Submit light"
 
-def body(request):
-    return request.get_json()
 
+# GET A COMPLETE LIST OF ALL BOARDS
+# TAKES A SECRET AS ARGUMENT AS SECURITY MEASURE
+@app.route("/boards", methods=["GET"])
+def get_boards():
+    secret_file = open("pie.txt", "r")
+    secret_word = str(secret_file.readline())
+    secret_file.close()
+    provided_secret = request.args.get("secret")
+    if secret_word != provided_secret:
+        return ('', 401)
+    boards_j = [board.__dict__ for board in list(board_dict.values())]
+    boards_json = {
+        "boards": boards_j
+    }
+    return jsonify(boards_json)
+
+
+
+'''
+Helper methods below here.
+Adds some nice headers, and method to easy access body of request
+'''
 @app.after_request
 def after_request(response):
     response.headers['Access-Control-Allow-Origin'] = "*"
     response.headers['Access-Control-Allow-Headers'] = "*"
     return response
 
-@app.route("/boards", methods=["GET"])
-def get_boards():
-    return jsonify(list(board_dict.keys()))
+def body(request):
+    return request.get_json()
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8081, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
