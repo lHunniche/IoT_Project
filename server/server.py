@@ -17,15 +17,18 @@ def init_board():
     _body = body(request)
     board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
     board_name = _body.get("name")
+    print("Submitted name: ", board_name)
 
     new_board = Board(board_id, board_name)
 
     if board_dict.get(board_id) is not None:
+        print("Tried to init already initted board.")
         return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
     temp_dict = dict()
     temp_dict["board_id"] = board_id
+    print("All went well!")
     return jsonify(temp_dict)
 
 
