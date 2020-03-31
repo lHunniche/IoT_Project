@@ -24,8 +24,9 @@ def init_board():
         return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
-    
-    return board_id
+    temp_dict = dict()
+    temp_dict["board_id"] = board_id
+    return jsonify(temp_dict)
 
 
 
@@ -110,11 +111,11 @@ def get_color_once():
 @app.route("/submitlight", methods=["POST"])
 def submit_light():
     global has_color_update
-    _body = body(request)
-    board_id = _body.get("board_id")
-    light = _body.get("light")
-    log_file = open("lightlog.csv", "a")
-    return "Submit light"
+    #_body = body(request)
+    #board_id = _body.get("board_id")
+    #light = _body.get("light")
+    #log_file = open("lightlog.csv", "a")
+    return "Submit light - not implemented"
 
 def body(request):
     return request.get_json()
@@ -127,13 +128,17 @@ def after_request(response):
 
 @app.route("/boards", methods=["GET"])
 def get_boards():
-    
+    secret_file = open("pie.txt", "r")
+    secret_word = str(secret_file.readline())
+    secret_file.close()
+    provided_secret = request.args.get("secret")
+    if secret_word != provided_secret:
+        return ('', 401)
     boards_j = [board.__dict__ for board in list(board_dict.values())]
     boards_json = {
         "boards": boards_j
     }
     return jsonify(boards_json)
-    #return jsonify(list(board_dict.keys()))
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
