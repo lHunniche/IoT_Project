@@ -39,7 +39,7 @@ def init_board():
 # SUBMIT NEW COLOR FOR BOARD
 @app.route("/submitcolor", methods=["POST"])
 def submit_color():
-    global has_color_update, board_dict
+    global board_dict
     _body = body(request)
     red = _body.get("red")
     green = _body.get("green")
@@ -51,9 +51,9 @@ def submit_color():
         return "SubmitColor - No board available with that ID."
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
+    board.has_update = True
     board_dict[board_id] = board
 
-    has_color_update = True
     return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + ")"
 
 
