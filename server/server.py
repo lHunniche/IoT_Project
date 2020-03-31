@@ -61,7 +61,7 @@ def submit_color():
 # GET COLOR OF BOARD !-WITH-! LONG POLLING
 @app.route("/getcolor", methods=["POST"])
 def get_color():
-    global has_color_update
+    global board_dict
     _body = body(request)
     board_id = _body.get("board_id")
 
@@ -75,11 +75,11 @@ def get_color():
         wait_counter = 0
         while wait_counter < 30:
             print(board_id + ": waiting for new color...")
-            if has_color_update:
+            if board_dict.get(board_id).has_update:
                 break
             time.sleep(2)
             wait_counter += 1
-        if not has_color_update:
+        if not board_dict.get(board_id).has_update:
             return ('', 204)    # The HTTP 204 No Content success status response code indicates
                                 # that the request has succeeded, but that the client 
                                 # doesn't need to go away from its current page. 
@@ -87,7 +87,9 @@ def get_color():
     else:
         long_polling.add_poller(board_id)
     
-    has_color_update = False
+    updated_board = board_dict.get(board_id)
+    updated_board.has_update = False
+    board_dict[board_id] = updated_board
     return jsonify(board.color)
 
 
