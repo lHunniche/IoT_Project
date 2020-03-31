@@ -8,6 +8,7 @@ app = Flask(__name__)
 has_color_update = True
 board_dict = dict()
 long_polling = LongPolling(10)
+debug = False
 
 
 # when boards are initted they should make a request to this endpoint
@@ -17,18 +18,21 @@ def init_board():
     _body = body(request)
     board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
     board_name = _body.get("name")
-    print("Submitted name: ", board_name)
+    if debug:
+        print("Submitted name: ", board_name)
 
     new_board = Board(board_id, board_name)
 
     if board_dict.get(board_id) is not None:
-        print("Tried to init already initted board.")
+        if debug: 
+            print("Tried to init already initted board.")
         return str(board_id) + " already initted."
 
     board_dict[board_id] = new_board
     temp_dict = dict()
     temp_dict["board_id"] = board_id
-    print("All went well!")
+    if debug: 
+        print("All went well!")
     return jsonify(temp_dict)
 
 
@@ -74,7 +78,8 @@ def get_color():
     if long_polling.is_polling(board_id):
         wait_counter = 0
         while wait_counter < 30:
-            print(board_id + ": waiting for new color...")
+            if debug:
+                print(board_id + ": waiting for new color...")
             if board_dict.get(board_id).has_update:
                 break
             time.sleep(2)
