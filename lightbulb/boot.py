@@ -11,6 +11,7 @@ ssid = 'Xrosby-Wifi'
 wifi_pass = 'boguspass'
 get_color_url = "http://klevang.dk:19409/getcolor"
 init_url = "http://klevang.dk:19409/init"
+board_id = ""
 
 
 pycom.heartbeat(False)
@@ -32,24 +33,28 @@ def connect(ssid, passw):
 def post(body, url):
     print(body)
     res = urequests.post(url, headers={"Content-Type": "application/json","Accept": "application/json"}, json=body)
+    result_body = res.text
+    result_body = eval(result_body)
     res.close()   
+    return result_body
 
 def init():
+    global board_id
+    print("Initting board")
     body = {
-        'board_id': 2
+        'name': "Stuen"
     }
-    post(body, init_url)
+    result = post(body, init_url)
+    board_id = result["board_id"]
+    print(board_id)
 
 def recieve_input():
     global get_color_url
+    global board_id
     body = {
-        'board_id': 2
+        'board_id': board_id
     }
-    try: 
-        res = urequests.post(get_color_url, json=body)
-    except Exception as e:
-        pass
-
+    res = urequests.post(get_color_url, json=body)
     if res.status_code == 200:
         color_d = res.text
         color_d = eval(color_d)
