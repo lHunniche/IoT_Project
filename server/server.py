@@ -7,7 +7,7 @@ from polling import LongPolling
 app = Flask(__name__)
 has_color_update = True
 board_dict = dict()
-long_polling = LongPolling(10)
+long_polling = LongPolling(poll_renew = 10)
 debug = False
 
 
