@@ -37,7 +37,13 @@ h1{
   text-align: center;
   padding:10%;
   border: 3px solid beige;
-  background-color: #06768d
+  background-color: #06768d;
+  transition: ease-in-out .4s;
+}
+.lightbulb-image-container:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+
 }
 
 .other-products-container {
@@ -48,7 +54,17 @@ h1{
   text-align: center;
   padding:10%;
   border: 3px solid beige;
-  background-color: #06768d
+  background-color: #06768d;
+  transition: ease-in-out .4s;
+}
+
+.other-products-container:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.frontpage-link{
+  padding:15%;
 }
 
 
