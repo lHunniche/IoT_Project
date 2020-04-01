@@ -1,7 +1,9 @@
 class Board:
-    def __init__(self, board_id):
+    def __init__(self, board_id, name):
         self.board_id = board_id
         self.color = {"red": 255, "green": 255, "blue": 255}
+        self.name = name
+        self.has_update = True
 
 
     def __str__(self):

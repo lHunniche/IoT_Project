@@ -1,0 +1,311 @@
+body {
+    color: beige;
+    background-color: #003747;
+    font-family: 'Open Sans', sans-serif;
+}
+#title{
+  margin-bottom: 0px;
+  background-color: #003747;
+  padding-bottom: 2%;
+  font-size: 65px;
+  color: #31A9b8;
+  margin-top: 0px;
+  text-align: center;
+  border-bottom: 3px solid beige;
+  -webkit-text-decoration: #31A9b8 double underline;
+  text-decoration: #31A9b8 double underline;
+}
+h1{
+  color:beige;
+}
+
+.board-options-container {
+  border:5px solid beige;
+  background-color: #31A9b8
+}
+
+.chart-container {
+  background-image: url("https://i.imgur.com/H8wGqnW.png");
+   background-size:cover;
+  background-position:center;
+	background-repeat:no-repeat;
+ 
+  border: 3px solid beige;
+  background-color: #06768d
+}
+
+.lightbulb-image-container{
+  background-image: url("https://www.aier.org/wp-content/uploads/2019/09/lightbulb.jpg");
+	/*background-position:center;*/
+	background-repeat:no-repeat;
+  background-size:cover;
+  text-align: center;
+  padding:10%;
+  border: 3px solid beige;
+  background-color: #06768d;
+  transition: ease-in-out .4s;
+}
+.lightbulb-image-container:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+
+}
+
+.other-products-container {
+  background-image: url("https://scm.dk/sites/default/files/styles/2400px/public/IMP49809215_l.jpg?itok=lr58DvzN.jpg");
+  background-position:center;
+	background-repeat:no-repeat;
+  background-size:cover;
+  text-align: center;
+  padding:10%;
+  border: 3px solid beige;
+  background-color: #06768d;
+  transition: ease-in-out .4s;
+}
+
+.other-products-container:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.frontpage-link{
+  padding:15%;
+}
+
+
+
+
+ #color-change-container{
+   text-align: center;;
+   border: 3px solid beige;
+   margin-top: 0px;
+   background-color: #065465;
+   padding: 5%;
+
+ }
+
+
+
+/* RADIO BUTTONS */
+
+.radio-container{
+    margin-top: 1%;
+}
+
+.radio-group{
+  text-align: center;
+  position: relative;
+  padding: 2%;
+}
+
+.radio{
+  /**/
+  color: beige;
+  display:inline-block;
+  background-color:#31A9b8;
+  border: 1px solid beige;
+  cursor:pointer;
+  margin: 2px;
+  margin-left: 2%; 
+  margin-top: 2.1%;
+  padding: 3%;
+  border-radius: 5px;
+  transition: ease-in-out .2s;
+}
+
+.radio:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.radio.selected:hover{
+  transform: none;
+}
+
+.radio.selected{
+  border-radius: 0px;
+  color: beige;
+  border: 4px solid beige;
+}
+
+
+/*______________*/
+
+
+
+
+/* PREVIEW BOX */
+
+
+#rgb-preview{
+    max-height: 10rem;
+    width: 100%;
+    margin-top: 2rem;
+    background-color: black;
+    -webkit-box-shadow: 10px 10px 0px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 0px -4px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 0px -4px rgba(0,0,0,0.75);
+}
+
+#rgb-preview:hover{
+    cursor: pointer;
+}
+
+#hover-preview{
+
+    color: white;
+    line-height: 5rem;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 30px;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    transition: .4s ease-in-out;
+}
+#hover-preview:hover{
+    opacity: 0;
+}
+
+
+/*_____________________*/
+
+
+/* INPUT RANGE SLIDERS */
+
+.slider {
+  margin-top:8%;
+  border-radius: 10px;
+  padding-left: 1.5rem;
+  width: 100%;
+}
+
+#sliders-container {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+}
+
+
+input[type=range] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    width: 100%; /* Specific width is required for Firefox. */
+    background: transparent; /* Otherwise white in Chrome */
+    margin-top: 5%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+-webkit-appearance: none;
+}
+
+input[type=range]:focus {
+outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+width: 100%;
+cursor: pointer;
+
+/* Hides the slider so custom styles can be added */
+background: transparent; 
+border-color: transparent;
+color: transparent;
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /*border: .7px solid #000000;*/
+    height: 25px;
+    width: 10px;
+    border-radius: 7px;
+    background: #ffffff;
+    cursor: pointer;
+    margin-top: -6px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+  }
+  
+  /* All the same stuff for Firefox */
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  
+  /* All the same stuff for IE */
+  input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 14px;
+    cursor: pointer;
+    background: #3071a9;
+    border-radius: 5%;
+    /*border: 0px solid #010101;*/
+  }
+  
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #367ebd;
+  }
+  
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+    background: #3071a9;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+  }
+  
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    border-width: 16px 0;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: #2a6495;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #3071a9;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #3071a9;
+    border: none
+    border-radius: 2.6px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #367ebd;
+  }
+
+  #range-red::-webkit-slider-runnable-track {
+    background:#CF3721
+  }
+
+  #range-green::-webkit-slider-runnable-track {
+    background: #258039;
+  }
+
+  #range-blue::-webkit-slider-runnable-track {
+    background: #31A9B8;
+  }
