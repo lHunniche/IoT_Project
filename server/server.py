@@ -48,17 +48,23 @@ def submit_color():
     red = _body.get("red")
     green = _body.get("green")
     blue = _body.get("blue")
+    pwm_cuty_cycle = _body.get("pwm_duty_cycle")
     board_id = _body.get("board_id")
 
     board = board_dict.get(board_id)
     if board == None:
         return "SubmitColor - No board available with that ID."
 
-    board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
+    # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
+    if pwm_cuty_cycle == None:
+        pwm_cuty_cycle = 100
+    # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
+
+    board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue), "pwm_duty_cycle" : int(pwm_cuty_cycle)}
     board.has_update = True
     board_dict[board_id] = board
 
-    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + ")"
+    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and PWm of " + str(pwm_cuty_cycle) + "%"
 
 
 
@@ -71,7 +77,7 @@ def get_color():
 
     board = board_dict.get(board_id)
     if board == None:
-        return "GetColor - No board available with that ID."
+        return "RE-INIT:No board with that ID exists"
 
     long_polling.remove_expired_polling_addresses()
 

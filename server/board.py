@@ -1,7 +1,7 @@
 class Board:
     def __init__(self, board_id, name):
         self.board_id = board_id
-        self.color = {"red": 255, "green": 255, "blue": 255}
+        self.color = {"red": 255, "green": 255, "blue": 255, "pwm_duty_cycle": 100}
         self.name = name
         self.has_update = True
 
