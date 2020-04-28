@@ -64,7 +64,7 @@ def submit_color():
     board.has_update = True
     board_dict[board_id] = board
 
-    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and PWm of " + pwm_cuty_cycle + "%"
+    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and PWm of " + str(pwm_cuty_cycle) + "%"
 
 
 
