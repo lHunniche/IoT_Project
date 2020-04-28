@@ -155,5 +155,5 @@ def body(request):
     return request.get_json()
 
 if __name__ == "__main__":
-    print("hej, jeg virker")
+    print("hej, jeg virker, måske?")
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
