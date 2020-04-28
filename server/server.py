@@ -77,7 +77,7 @@ def get_color():
 
     board = board_dict.get(board_id)
     if board == None:
-        return "GetColor - No board available with that ID."
+        return "RE-INIT:No board with that ID exists"
 
     long_polling.remove_expired_polling_addresses()
 
