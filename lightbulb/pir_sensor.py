@@ -17,6 +17,8 @@ def init_pir():
     global present
     print("Starting PIR loop")
     while True:
+        pir_val = pir()
+        print(pir_val)
         if pir() == 1:
             if time.time() - last_trigger > hold_time_sec:
                 last_trigger = time.time()

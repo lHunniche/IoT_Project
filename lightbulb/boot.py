@@ -15,19 +15,23 @@ wifi_pass = 'boguspass'
 get_color_url = "http://klevang.dk:19409/getcolor"
 init_url = "http://klevang.dk:19409/init"
 board_id = ""
-
-
-
-pwm = PWM(0, frequency=5000) 
-pwm_c = pwm.channel(0, pin='P2', duty_cycle=0.5)
-pwm_c.duty_cycle(0.3) # change the duty cycle to 30%
+wlan = WLAN(mode=WLAN.STA)
 OFF = 0x000000
 
 
 pycom.heartbeat(False)
 
+
+def init_pwm():
+    #pwm = PWM(0, frequency=5000) 
+    #pwm_c = pwm.channel(0, pin='P2', duty_cycle=0)
+    #pwm_c.duty_cycle(0.3) # change the duty cycle to 30%
+
+    pwm = PWM(0, frequency=5000)  # use PWM timer 0, with a frequency of 5KHz
+    pwm_c = pwm.channel(0, pin='P2', duty_cycle=0.5)
+    pwm_c.duty_cycle(0.3) # change the duty cycle to 30%
+
 def connect(ssid, passw):
-    wlan = WLAN(mode=WLAN.STA)
     if not wlan.isconnected():
         nets = wlan.scan()
         for net in nets:
@@ -36,7 +40,7 @@ def connect(ssid, passw):
                 print(ssid, ' found!')
                 wlan.connect(net.ssid, auth=(net.sec, passw), timeout=5000)
                 while not wlan.isconnected():
-                    machine.idle() # save power while waiting
+                    machine.idle() 
                 print('WLAN connection to ', ssid,' succesful!')
                 break
 
@@ -61,7 +65,6 @@ def init():
 def recieve_input():
     global get_color_url
     global board_id
-    print("GETTING COLOR")
     body = {
         'board_id': board_id
     }
@@ -73,40 +76,34 @@ def recieve_input():
         r,g,b = color_d['red'], color_d['green'], color_d['blue']
         hex_str = '0x%02x%02x%02x' % (r,g,b)
         hex_int = int(hex_str, 16)
+        res.close()
         return hex_int
+    res.close()
     return None
 
 def main_loop():
+    global wlan
     print("Starting main loop")
     while True:
-        color = recieve_input()
-        pycom.rgbled(color)
-        print("I am now ")
-        print(color)
-        #if color is not None and pir_presence():
-        #    pycom.rgbled(color)
-        #if pir_presence() is False:
-        #    pycom.rgbled(OFF)
-
-
+        try: 
+            presence = pir_presence();
+            color = recieve_input()
+            if color is not None:
+                pycom.rgbled(color)
+            else:
+                print("No color found")
+        except Exception as e:
+            print(e)
+            if not wlan.isconnected():
+                print("Lost connection. Attempting to reconnect.")
+                connect()
+            
 
 def run():
-    connect(ssid, wifi_pass)
+    #connect(ssid, wifi_pass)
     #init()
-    main_loop()
+    #init_pwm()
     #_thread.start_new_thread(main_loop, ())
-    #_thread.start_new_thread(init_pir, ())
-
-connect(ssid, wifi_pass)
-init()
-main_loop()
-
-"""
-while True:   
-    try:
-        run()
-    except Exception as e:
-        print(e)
-        time.sleep(5)
-        pass
-"""
+    _thread.start_new_thread(init_pir, ())
+ 
+run()
