@@ -111,13 +111,12 @@ def get_color():
 # return RGB values adjusted for brightness
 def adjust_rgb_for_intensity(board):
     temp_board = copy.deepcopy(board)
-    #temp_board.led_intensity = copy.deepcopy(board.led_intensity)
-    #temp_board.color = copy.deepcopy(board.color)
-    
     adjustment = temp_board.led_intensity / 100
+
     temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
     temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
     temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
+    
     return temp_board.color
 
 

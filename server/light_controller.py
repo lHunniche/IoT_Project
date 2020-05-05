@@ -43,7 +43,7 @@ class Actuator:
                         .board_with_id(board.board_id)\
                         .measured(light_measured)\
                         .with_setpoint(self.setpoint)\
-                        .and_intensity_of(self.led_brightness)
+                        .and_intensity_of(self.led_intensity)
         readings.append(reading)
 
         dist_to_setpoint = self.setpoint - reading.light_level
@@ -57,17 +57,17 @@ class Actuator:
         if abs(dist_to_setpoint) < 10:
             return board
         
-        # take the square root of the distance, interpret as percentage, and 
+        # take the square root of the distance, interpret as percentage, and subtract that from current intensity
         act_value = int(math.sqrt(abs(dist_to_setpoint)))/100
-        current_pwm = board.color["pwm_duty_cycle"]
-        new_pwm = 0
+        led_intensity = board.color["led_intensity"]
+        new_led_intensity = 0
         
         if dist_to_setpoint > 0:
-            new_pwm = current_pwm + current_pwm*act_value
+            new_led_intensity = led_intensity + led_intensity*act_value
         else:
-            new_pwm = current_pwm - current_pwm*act_value
+            new_led_intensity = led_intensity - led_intensity*act_value
 
-        board.color["pwm_duty_cycle"] = new_pwm
+        board.color["led_intensity"] = new_led_intensity
         return board
         
             
