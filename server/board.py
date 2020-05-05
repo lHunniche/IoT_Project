@@ -1,5 +1,5 @@
 class Board:
-    def __init__(self, board_id, name):
+    def __init__(self, board_id=None, name=None):
         self.board_id = board_id
         self.color = {"red": 255, "green": 255, "blue": 255}
         self.led_intensity = 50
