@@ -8,10 +8,12 @@ app = Flask(__name__)
 has_color_update = True
 board_dict = dict()
 color_long_polling = LongPolling(poll_renew = 10)
-debug = True
+debug = False
 
 
 # when boards are initted they should make a request to this endpoint
+# REQUIRES:
+#   name
 @app.route("/init", methods=["POST"])
 def init_board():
     global board_dict
@@ -126,7 +128,7 @@ def get_color_once():
 
     if board == None:
         return "GetCurrentColor - No board available with that ID."
-    return jsonify(board.color)
+    return jsonify(adjust_rgb_for_intensity(board))
 
 
 
