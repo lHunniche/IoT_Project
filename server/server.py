@@ -7,7 +7,7 @@ from polling import LongPolling
 app = Flask(__name__)
 has_color_update = True
 board_dict = dict()
-long_polling = LongPolling(poll_renew = 10)
+color_long_polling = LongPolling(poll_renew = 10)
 debug = True
 
 
@@ -48,7 +48,7 @@ def submit_color():
     red = _body.get("red")
     green = _body.get("green")
     blue = _body.get("blue")
-    pwm_cuty_cycle = _body.get("pwm_duty_cycle")
+    led_intensity = _body.get("led_intensity")
     board_id = _body.get("board_id")
 
     board = board_dict.get(board_id)
@@ -56,11 +56,11 @@ def submit_color():
         return "SubmitColor - No board available with that ID."
 
     # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
-    if pwm_cuty_cycle == None:
-        pwm_cuty_cycle = 100
+    #if led_intensity == None:
+    #    led_intensity = 50
     # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
 
-    board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue), "pwm_duty_cycle" : int(pwm_cuty_cycle)}
+    board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.has_update = True
     board_dict[board_id] = board
 
@@ -79,9 +79,9 @@ def get_color():
     if board == None:
         return "RE-INIT:No board with that ID exists"
 
-    long_polling.remove_expired_polling_addresses()
+    color_long_polling.remove_expired_polling_addresses()
 
-    if long_polling.is_polling(board_id):
+    if color_long_polling.is_polling(board_id):
         wait_counter = 0
         while wait_counter < 30:
             if debug:
@@ -96,12 +96,26 @@ def get_color():
                                 # doesn't need to go away from its current page. 
                                 # A 204 response is cacheable by default.
     else:
-        long_polling.add_poller(board_id)
+        color_long_polling.add_poller(board_id)
     
     updated_board = board_dict.get(board_id)
     updated_board.has_update = False
     board_dict[board_id] = updated_board
-    return jsonify(board.color)
+
+    return jsonify(adjust_rgb_for_intensity(board))
+
+
+# return RGB values adjusted for brightness
+def adjust_rgb_for_intensity(board):
+    temp_board = Board()
+    temp_board.intensity = board.intensity
+    temp_board.color = board.color
+    
+    adjustment = temp_board.intensity / 100
+    temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
+    temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
+    temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
+    return temp_board.color
 
 
 # GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
