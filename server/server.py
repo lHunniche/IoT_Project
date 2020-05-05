@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-import time, string, random
+import time, string, random, copy
 from board import Board
 from polling import LongPolling
 
@@ -105,14 +105,14 @@ def get_color():
     updated_board.has_update = False
     board_dict[board_id] = updated_board
 
-    return jsonify(adjust_rgb_for_intensity(board))
+    return jsonify(adjust_rgb_for_intensity(updated_board))
 
 
 # return RGB values adjusted for brightness
 def adjust_rgb_for_intensity(board):
     temp_board = Board()
-    temp_board.led_intensity = board.led_intensity
-    temp_board.color = board.color
+    temp_board.led_intensity = copy.deepcopy(board.led_intensity)
+    temp_board.color = copy.deepcopy(board.color)
     
     adjustment = temp_board.led_intensity / 100
     temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
