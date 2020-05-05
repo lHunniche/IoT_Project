@@ -63,10 +63,11 @@ def submit_color():
     # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
+    board.led_intensity = int(led_intensity)
     board.has_update = True
     board_dict[board_id] = board
 
-    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and PWm of " + str(pwm_cuty_cycle) + "%"
+    return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and Intensity of " + str(led_intensity) + "%"
 
 
 
