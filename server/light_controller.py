@@ -32,7 +32,7 @@ class LightActuator:
         self.readings = list()
 
 
-    def submit_reading(self, light_measured, setpoint, board):
+    def submit_reading(self, board, light_measured, setpoint):
         # see how far reading deviates from setpoint
         # determine course of action (increase, decrease, or do nothing)
 

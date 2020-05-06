@@ -120,6 +120,9 @@ def get_color_once():
 
 
 
+# REQUIRES:
+#   board_id
+#   setpoint for light
 @app.route("/toggleautolight", methods=["POST"])
 def toggle_auto_light_mode():
     body = get_body(request)
@@ -140,7 +143,10 @@ def toggle_auto_light_mode():
         return "AutoLight disabled in " + board.name
 
 
-@app.route("/autolightupdate", methods="POST")
+# REQUIRES:
+#   board_id
+#   measured_light
+@app.route("/autolightupdate", methods=["POST"])
 def auto_light_actuator():
     body = get_body(request)
     board_id = body.get("board_id")
@@ -155,6 +161,9 @@ def auto_light_actuator():
     return "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."
 
 
+@app.route("/updatesetpoint", methods=["POST"])
+def update_setpoint():
+    pass
 
 
 # SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
