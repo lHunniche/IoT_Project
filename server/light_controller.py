@@ -45,7 +45,7 @@ class light_actuator:
         self.readings.append(reading)
 
         dist_to_setpoint = setpoint - reading.light_level
-        updated_board = act_on_reading(dist_to_setpoint, board)
+        updated_board = self.act_on_reading(dist_to_setpoint, board)
 
         return updated_board
 
