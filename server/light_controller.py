@@ -42,7 +42,7 @@ class light_actuator:
                         .measured(light_measured)\
                         .with_setpoint(setpoint)\
                         .and_intensity_of(board.led_intensity)
-        readings.append(reading)
+        self.readings.append(reading)
 
         dist_to_setpoint = setpoint - reading.light_level
         updated_board = act_on_reading(dist_to_setpoint, board)
