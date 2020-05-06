@@ -26,3 +26,5 @@ class Board:
         if isinstance(other, Board):
             return self.board == other.board_id
         return False
+
+    

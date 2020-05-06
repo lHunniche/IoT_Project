@@ -164,9 +164,22 @@ def auto_light_actuator():
     return "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."
 
 
+# REQUIRES:
+#   board_id
+#   setpoint
 @app.route("/updatesetpoint", methods=["POST"])
 def update_setpoint():
-    pass
+    body = get_body(request)
+    board_id = body.get("board_id")
+    setpoint = body.get("setpoint")
+
+    board = board_dict.get(board_id)
+    if board == None:
+        return "UpdateSetpoint - Board Error"
+    
+    board.setpoint = setpoint
+
+    return "Setpoint updated"
 
 
 # SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
