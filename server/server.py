@@ -156,7 +156,7 @@ def auto_light_actuator():
     board = board_dict.get(board_id)
     initial_led_intensity = board.led_intensity
     updated_board = l_actuator.submit_reading(board, measured_light, board.setpoint)
-    board.dict[board_id] = updated_board
+    board_dict[board_id] = updated_board
     updated_led_intensity = updated_board.led_intensity
 
     return "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."
