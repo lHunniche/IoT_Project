@@ -5,6 +5,8 @@ class Board:
         self.led_intensity = 50
         self.name = name
         self.has_update = True
+        self.auto_adjust_light = False
+        self.setpoint = None
 
 
     def __str__(self):
@@ -16,7 +18,7 @@ class Board:
             self.color["red"]*17 + \
             self.color["green"]*31 + \
             self.color["blue"]*43 + \
-            self.color["pwm_duty_cycle"]*59
+            self.led_intensity*59
 
 
     def __eq__(self, other):

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, make_response
 import time, string, random, copy
 from board import Board
 from polling import LongPolling
+from light_controller import LightActuator
 
 
 app = Flask(__name__)
@@ -17,9 +18,9 @@ debug = False
 @app.route("/init", methods=["POST"])
 def init_board():
     global board_dict
-    _body = body(request)
+    body = get_body(request)
     board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
-    board_name = _body.get("name")
+    board_name = body.get("name")
     if debug:
         print("Submitted name: ", board_name)
 
@@ -46,12 +47,12 @@ def init_board():
 @app.route("/submitcolor", methods=["POST"])
 def submit_color():
     global board_dict
-    _body = body(request)
-    red = _body.get("red")
-    green = _body.get("green")
-    blue = _body.get("blue")
-    led_intensity = _body.get("led_intensity")
-    board_id = _body.get("board_id")
+    body = get_body(request)
+    red = body.get("red")
+    green = body.get("green")
+    blue = body.get("blue")
+    led_intensity = body.get("led_intensity")
+    board_id = body.get("board_id")
 
     board = board_dict.get(board_id)
     if board == None:
@@ -70,13 +71,12 @@ def submit_color():
     return "Board with ID " + str(board_id) + " has following color: (" + str(red) + ", " + str(green) + ", " + str(blue) + "), and Intensity of " + str(led_intensity) + "%"
 
 
-
 # GET COLOR OF BOARD !-WITH-! LONG POLLING
 @app.route("/getcolor", methods=["POST"])
 def get_color():
     global board_dict
-    _body = body(request)
-    board_id = _body.get("board_id")
+    body = get_body(request)
+    board_id = body.get("board_id")
 
     board = board_dict.get(board_id)
     if board == None:
@@ -108,18 +108,6 @@ def get_color():
     return jsonify(adjust_rgb_for_intensity(updated_board))
 
 
-# return RGB values adjusted for brightness
-def adjust_rgb_for_intensity(board):
-    temp_board = copy.deepcopy(board)
-    adjustment = temp_board.led_intensity / 100
-
-    temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
-    temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
-    temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
-    
-    return temp_board.color
-
-
 # GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
 @app.route("/getcurrentcolor", methods=["GET"])
 def get_color_once():
@@ -132,13 +120,50 @@ def get_color_once():
 
 
 
+@app.route("/toggleautolight", methods=["POST"])
+def toggle_auto_light_mode():
+    body = get_body(request)
+    board_id = body.get("board_id")
+    setpoint = body.get("setpoint")
+
+    board = board_dict.get(board_id)
+    if board == None:
+        return "ToggleAutoLight - Error"
+    board.auto_adjust_light = not board.auto_adjust_light
+    board.has_update = True
+    if setpoint != None:
+        board.setpoint = setpoint
+
+    if board.auto_adjust_light:
+        return "AutoLight enabled in " + board.name
+    else:
+        return "AutoLight disabled in " + board.name
+
+
+@app.route("/autolightupdate", methods="POST")
+def auto_light_actuator():
+    body = get_body(request)
+    board_id = body.get("board_id")
+    measured_light = body.get("measured_light")
+
+    board = board_dict.get(board_id)
+    initial_led_intensity = board.led_intensity
+    updated_board = LightActuator.submit_reading(board, measured_light, board.setpoint)
+    board.dict[board_id] = updated_board
+    updated_led_intensity = updated_board.led_intensity
+
+    return "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."
+
+
+
+
 # SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
 @app.route("/submitlight", methods=["POST"])
 def submit_light():
     global has_color_update
-    _body = body(request)
-    board_id = _body.get("board_id")
-    light = _body.get("light")
+    body = get_body(request)
+    board_id = body.get("board_id")
+    light = body.get("light")
     log_file = open("lightlog.csv", "a")
     log_file.write(light + "," + time.time_ns())
     log_file.close()
@@ -163,6 +188,18 @@ def get_boards():
 
 
 
+# return RGB values adjusted for brightness
+def adjust_rgb_for_intensity(board):
+    temp_board = copy.deepcopy(board)
+    adjustment = temp_board.led_intensity / 100
+
+    temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
+    temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
+    temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
+    
+    return temp_board.color
+
+
 '''
 Helper methods below here.
 Adds some nice headers, and method to easy access body of request
@@ -173,7 +210,7 @@ def after_request(response):
     response.headers['Access-Control-Allow-Headers'] = "*"
     return response
 
-def body(request):
+def get_body(request):
     return request.get_json()
 
 if __name__ == "__main__":

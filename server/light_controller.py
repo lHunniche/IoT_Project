@@ -13,8 +13,8 @@ class Reading:
         return self
     
 
-    def and_intensity_of(self, brightness):
-        self.led_brightness = brightness
+    def and_intensity_of(self, led_intensity):
+        self.led_intensity = led_intensity
         return self
     
 
@@ -27,14 +27,12 @@ class Reading:
         return self
 
 
-class Actuator:
+class LightActuator:
     def __init__(self):
-        self.setpoint = None
         self.readings = list()
-        self.led_intensity = None
 
 
-    def submit_reading(self, light_measured, board):
+    def submit_reading(self, light_measured, setpoint, board):
         # see how far reading deviates from setpoint
         # determine course of action (increase, decrease, or do nothing)
 
@@ -42,11 +40,11 @@ class Actuator:
         reading = Reading()\
                         .board_with_id(board.board_id)\
                         .measured(light_measured)\
-                        .with_setpoint(self.setpoint)\
-                        .and_intensity_of(self.led_intensity)
+                        .with_setpoint(setpoint)\
+                        .and_intensity_of(board.led_intensity)
         readings.append(reading)
 
-        dist_to_setpoint = self.setpoint - reading.light_level
+        dist_to_setpoint = setpoint - reading.light_level
         updated_board = act_on_reading(dist_to_setpoint, board)
 
         return updated_board
@@ -57,7 +55,7 @@ class Actuator:
         if abs(dist_to_setpoint) < 10:
             return board
         
-        # take the square root of the distance, interpret as percentage, and subtract that from current intensity
+        # take the square root of the distance, interpret as percentage, and subtract/add that from current intensity
         act_value = int(math.sqrt(abs(dist_to_setpoint)))/100
         led_intensity = board.color["led_intensity"]
         new_led_intensity = 0
