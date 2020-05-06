@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, make_response
 import time, string, random, copy
 from board import Board
 from polling import LongPolling
-from light_controller import LightActuator
+from light_controller import light_actuator
 
 
 app = Flask(__name__)
@@ -10,6 +10,7 @@ has_color_update = True
 board_dict = dict()
 color_long_polling = LongPolling(poll_renew = 10)
 debug = False
+l_actuator = light_actuator()
 
 
 # when boards are initted they should make a request to this endpoint
@@ -154,7 +155,7 @@ def auto_light_actuator():
 
     board = board_dict.get(board_id)
     initial_led_intensity = board.led_intensity
-    updated_board = LightActuator.submit_reading(board, measured_light, board.setpoint)
+    updated_board = l_actuator.submit_reading(board, measured_light, board.setpoint)
     board.dict[board_id] = updated_board
     updated_led_intensity = updated_board.led_intensity
 

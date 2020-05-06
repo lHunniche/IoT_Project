@@ -27,7 +27,7 @@ class Reading:
         return self
 
 
-class LightActuator:
+class light_actuator:
     def __init__(self):
         self.readings = list()
 
