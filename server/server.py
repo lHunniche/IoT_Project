@@ -154,6 +154,8 @@ def auto_light_actuator():
     measured_light = body.get("measured_light")
 
     board = board_dict.get(board_id)
+    if board == None:
+        return "AutoLightUpdate - Error"
     initial_led_intensity = board.led_intensity
     updated_board = l_actuator.submit_reading(board, measured_light, board.setpoint)
     board_dict[board_id] = updated_board
