@@ -73,7 +73,7 @@ def submit_color():
 
 
 # GET COLOR OF BOARD !-WITH-! LONG POLLING
-@app.route("/getcolor", methods=["POST"])
+@app.route("/getupdates", methods=["POST"])
 def get_color():
     global board_dict
     body = get_body(request)
@@ -106,7 +106,8 @@ def get_color():
     updated_board.has_update = False
     board_dict[board_id] = updated_board
 
-    return jsonify(adjust_rgb_for_intensity(updated_board))
+    temp_board = adjust_rgb_for_intensity(updated_board)
+    return jsonify(temp_board.__dict__)
 
 
 # GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
@@ -222,7 +223,7 @@ def adjust_rgb_for_intensity(board):
     temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
     temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
     
-    return temp_board.color
+    return temp_board
 
 
 '''

@@ -55,7 +55,7 @@ class light_actuator:
         if abs(dist_to_setpoint) < 10:
             return board
         
-        # take the square root of the distance, interpret as percentage, and subtract/add that from current intensity
+        # take the square root of the distance, interpret as percentage, and subtract/add that from current intensity (then multiplied by 2 for bigger changes)
         act_value = (int(math.sqrt(abs(dist_to_setpoint)))/100)*2
         led_intensity = board.led_intensity
         new_led_intensity = 0

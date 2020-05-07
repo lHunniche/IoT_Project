@@ -27,4 +27,14 @@ class Board:
             return self.board == other.board_id
         return False
 
-    
+
+    '''
+    def to_dict(self):
+        md = dict()
+        
+        md["board_id"] = self.board_id
+        md["color"] = self.color
+        md["led_intensity"] = self.led_intensity
+        md["name"] = self.name
+        md["has_update"]
+    '''
