@@ -1,7 +1,7 @@
 import time
 
 class LongPolling:
-    def __init__(self, poll_renew):
+    def __init__(self, poll_renew=60):
         self.polling_addresses = []
         self.poll_renew = poll_renew
 
