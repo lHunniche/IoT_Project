@@ -115,7 +115,7 @@ $(document).ready(function () {
             "red": r,
             "green": g,
             "blue": b,
-            "pwm_duty_cycle": pwmPercentage
+            "led_intensity": pwmPercentage
         }
         fetch('http://klevang.dk:19409/submitcolor', {
             method: 'POST',
