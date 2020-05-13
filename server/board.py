@@ -7,6 +7,7 @@ class Board:
         self.has_update = True
         self.auto_adjust_light = False
         self.setpoint = None
+        self.blue_light_filter = False
 
 
     def __str__(self):

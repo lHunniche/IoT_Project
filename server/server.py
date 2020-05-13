@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-import time, string, random, copy
+import time, string, random, copy, json
 from board import Board
 from polling import LongPolling
 from light_controller import light_actuator
@@ -54,6 +54,7 @@ def submit_color():
     blue = body.get("blue")
     led_intensity = body.get("led_intensity")
     board_id = body.get("board_id")
+    blue_light_filter_bool = body.get("blue_light_filter")
 
     board = board_dict.get(board_id)
     if board == None:
@@ -66,6 +67,7 @@ def submit_color():
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.led_intensity = int(led_intensity)
+    board.blue_light_filter = blue_light_filter_bool
     board.has_update = True
     board_dict[board_id] = board
 
@@ -106,7 +108,11 @@ def get_color():
     updated_board.has_update = False
     board_dict[board_id] = updated_board
 
-    temp_board = adjust_rgb_for_intensity(updated_board)
+    temp_board = copy.deepcopy(updated_board)
+
+    # perform any last minute adjustments before sending board off
+    adjust_rgb_for_intensity(temp_board)
+    adjust_rgb_for_blue_filter(temp_board)
     return jsonify(temp_board.__dict__)
 
 
@@ -118,6 +124,11 @@ def get_color_once():
 
     if board == None:
         return "GetCurrentColor - No board available with that ID."
+    
+    # perform any last minute adjustments before sending board off
+    temp_board = copy.deepcopy(board)
+    adjust_rgb_for_intensity(temp_board)
+    adjust_rgb_for_blue_filter(temp_board)
     return jsonify(adjust_rgb_for_intensity(board))
 
 
@@ -184,7 +195,7 @@ def update_setpoint():
 
 
 # SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
-@app.route("/submitlight", methods=["POST"])
+@app.route("/submitlightdata", methods=["POST"])
 def submit_light():
     global has_color_update
     body = get_body(request)
@@ -216,14 +227,22 @@ def get_boards():
 
 # return RGB values adjusted for brightness
 def adjust_rgb_for_intensity(board):
-    temp_board = copy.deepcopy(board)
-    adjustment = temp_board.led_intensity / 100
+    adjustment = board.led_intensity / 100
 
-    temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
-    temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
-    temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
+    board.color["red"] = int(board.color["red"] * adjustment)
+    board.color["green"] = int(board.color["green"] * adjustment)
+    board.color["blue"] = int(board.color["blue"] * adjustment)
     
-    return temp_board
+    return board
+
+
+# alter the RGB values for when blue light filtering is enabled
+def adjust_rgb_for_blue_filter(board):
+    if board.blue_light_filter:
+        board.color["blue"] = 0
+    return board
+
+
 
 
 '''
