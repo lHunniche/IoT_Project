@@ -309,3 +309,6 @@ input[type=range]::-webkit-slider-thumb {
   #range-blue::-webkit-slider-runnable-track {
     background: #31A9B8;
   }
+  #range-pwm::-webkit-slider-runnable-track {
+    background: #FFFFFF;
+  }

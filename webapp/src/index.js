@@ -88,12 +88,17 @@ $(document).ready(function () {
 
     let updatePreview = () => {
         let preview = document.getElementById("rgb-preview")
+        let percentDisplay = document.getElementById("percent-display")
+        let rangePWM = document.getElementById("range-pwm").value
+        console.log(rangePWM)
         let previewHover = document.getElementById("hover-preview")
         let r = document.getElementById("range-red").value
         let g = document.getElementById("range-green").value
         let b = document.getElementById("range-blue").value
         let previewBG = "rgb(" + r + "," + g + "," + b + ")"
         let invertedColor = light([r, g, b]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
+        percentDisplay.innerHTML = rangePWM + "%"
+        percentDisplay.style.color = invertedColor
         previewHover.style.color = invertedColor
         preview.style.backgroundColor = previewBG
     }
@@ -102,13 +107,15 @@ $(document).ready(function () {
         let r = parseInt(document.getElementById("range-red").value)
         let g = parseInt(document.getElementById("range-green").value)
         let b = parseInt(document.getElementById("range-blue").value)
+        let pwmPercentage = parseInt(document.getElementById("range-pwm").value)
         let boardID = selected
         setBoardColor(boardID, { "red": r, "green": g, "blue": b })
         let colorData = {
             "board_id": boardID,
             "red": r,
             "green": g,
-            "blue": b
+            "blue": b,
+            "led_intensity": pwmPercentage
         }
         fetch('http://klevang.dk:19409/submitcolor', {
             method: 'POST',
@@ -134,9 +141,10 @@ $(document).ready(function () {
     }
 
     let initRangeSliderListeners = () => {
-        document.getElementById("range-red").addEventListener("input", updatePreview)
-        document.getElementById("range-green").addEventListener("input", updatePreview)
-        document.getElementById("range-blue").addEventListener("input", updatePreview)
+        let sliders = ["range-red", "range-green", "range-blue", "range-pwm"]
+        for(slider of sliders) {
+            document.getElementById(slider).addEventListener("input", updatePreview)
+        }
     }
     let initRadioEventListener = () => {
         $('.radio-group .radio').click(function () {
