@@ -60,10 +60,10 @@ def submit_color():
     if board == None:
         return "SubmitColor - No board available with that ID."
 
-    # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
-    #if led_intensity == None:
-    #    led_intensity = 50
-    # !!! DELETE WHEN PWM IS FULLY IMPLEMENTED !!!
+    # !!! DELETE WHEN BLUE LIGHT FILTER IS FULLY IMPLEMENTED !!!
+    if blue_light_filter_bool == None:
+        blue_light_filter_bool = False
+    # !!! DELETE WHEN BLUE LIGHT FILTER IS FULLY IMPLEMENTED !!!
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.led_intensity = int(led_intensity)
