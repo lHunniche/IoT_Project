@@ -129,7 +129,7 @@ def get_color_once():
     temp_board = copy.deepcopy(board)
     adjust_rgb_for_intensity(temp_board)
     adjust_rgb_for_blue_filter(temp_board)
-    return jsonify(adjust_rgb_for_intensity(board))
+    return jsonify(adjust_rgb_for_intensity(board).__dict__)
 
 
 
