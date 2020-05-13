@@ -174,7 +174,8 @@ def auto_light_actuator():
     board_dict[board_id] = updated_board
     updated_led_intensity = updated_board.led_intensity
 
-    return "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."
+    return_body = {"return_message" : "Intensity changed from " + str(initial_led_intensity) + " to " + str(updated_led_intensity) + "."}
+    return jsonify(return_body)
 
 
 # REQUIRES:
