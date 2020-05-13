@@ -170,6 +170,7 @@ def auto_light_actuator():
         return "AutoLightUpdate - Error"
     initial_led_intensity = board.led_intensity
     updated_board = l_actuator.submit_reading(board, measured_light, board.setpoint)
+    updated_board.has_update = True
     board_dict[board_id] = updated_board
     updated_led_intensity = updated_board.led_intensity
 
@@ -260,3 +261,16 @@ def get_body(request):
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
+
+
+should_continue = True
+def send_light_level_for_auto_adjust():
+    global should_continue
+    while should_continue:
+        #send_light_with_http()
+        time.sleep(10)
+
+
+from threading import Thread 
+t = Thread(target = send_light_level_for_auto_adjust) 
+t.start() 
