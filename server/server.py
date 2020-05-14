@@ -15,7 +15,7 @@ l_actuator = light_actuator()
 '''
 VARIABLES
 '''
-length_of_board_id = 2
+length_of_board_id = 1
 
 
 # when boards are initted they should make a request to this endpoint
