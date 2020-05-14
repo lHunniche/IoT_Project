@@ -124,7 +124,7 @@ def get_color():
 
 
 # GET COLOR OF BOARD !-WITHOUT-! LONG POLLING
-@app.route("/getcurrentcolor", methods=["GET"])
+@app.route("/getboardinfo", methods=["GET"])
 def get_color_once():
     board_id = request.args.get("board_id")
     board = board_dict.get(board_id)
