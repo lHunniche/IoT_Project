@@ -12,15 +12,22 @@ color_long_polling = LongPolling(poll_renew = 10)
 debug = False
 l_actuator = light_actuator()
 
+'''
+VARIABLES
+'''
+length_of_board_id = 2
+
 
 # when boards are initted they should make a request to this endpoint
 # REQUIRES:
 #   name
+# RETURNS:
+#   board_id
 @app.route("/init", methods=["POST"])
 def init_board():
     global board_dict
     body = get_body(request)
-    board_id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+    board_id = ''.join(random.choice(string.ascii_letters) for i in range(length_of_board_id))
     board_name = body.get("name")
     if debug:
         print("Submitted name: ", board_name)
@@ -108,9 +115,9 @@ def get_color():
     updated_board.has_update = False
     board_dict[board_id] = updated_board
 
+    # perform any last minute adjustments before sending board off
     temp_board = copy.deepcopy(updated_board)
 
-    # perform any last minute adjustments before sending board off
     adjust_rgb_for_intensity(temp_board)
     adjust_rgb_for_blue_filter(temp_board)
     return jsonify(temp_board.__dict__)
@@ -136,6 +143,8 @@ def get_color_once():
 # REQUIRES:
 #   board_id
 #   setpoint for light
+# RETURNS:
+#   message
 @app.route("/toggleautolight", methods=["POST"])
 def toggle_auto_light_mode():
     body = get_body(request)
@@ -162,6 +171,8 @@ def toggle_auto_light_mode():
 # REQUIRES:
 #   board_id
 #   measured_light
+# RETURNS:
+#   message
 @app.route("/autolightupdate", methods=["POST"])
 def auto_light_actuator():
     body = get_body(request)
@@ -185,6 +196,8 @@ def auto_light_actuator():
 # REQUIRES:
 #   board_id
 #   setpoint
+# RETURNS:
+#   message
 @app.route("/updatesetpoint", methods=["POST"])
 def update_setpoint():
     body = get_body(request)
@@ -201,16 +214,21 @@ def update_setpoint():
 
 
 # SUBMIT LIGHT SENSED BY BOARD AND APPEND IT TO FILE
+# REQUIRES:
+#   board_id
+#   measured_light
+# RETURNS:
+#   message
 @app.route("/submitlightdata", methods=["POST"])
 def submit_light():
     global has_color_update
     body = get_body(request)
     board_id = body.get("board_id")
-    light = body.get("light")
+    light = body.get("measured_light")
     log_file = open("lightlog.csv", "a")
     log_file.write(light + "," + time.time_ns())
     log_file.close()
-    return "Submit light"
+    return "Submit light data"
 
 
 # GET A COMPLETE LIST OF ALL BOARDS
@@ -268,14 +286,5 @@ if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8081, threaded=True) # 19409
 
 
-should_continue = True
-def send_light_level_for_auto_adjust():
-    global should_continue
-    while should_continue:
-        #send_light_with_http()
-        time.sleep(10)
 
 
-from threading import Thread 
-t = Thread(target = send_light_level_for_auto_adjust) 
-t.start() 
