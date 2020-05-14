@@ -15,7 +15,7 @@ l_actuator = light_actuator()
 '''
 VARIABLES
 '''
-length_of_board_id = 1
+length_of_board_id = 10
 
 
 # when boards are initted they should make a request to this endpoint
@@ -265,6 +265,8 @@ def adjust_rgb_for_blue_filter(board):
     if board.blue_light_filter:
         board.color["blue"] = 0
     return board
+
+
 
 
 
