@@ -72,6 +72,17 @@ def submit_color():
         blue_light_filter_bool = False
     # !!! DELETE WHEN BLUE LIGHT FILTER IS FULLY IMPLEMENTED !!!
 
+    red = int(red)
+    green = int(green)
+    blue = int(blue)
+    
+    red = max(0, red)
+    red = min(255, red)
+    green = max(0, green)
+    green = min(255, green)
+    blue = max(0, blue)
+    blue = min(255, blue)
+
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.led_intensity = int(led_intensity)
     board.blue_light_filter = blue_light_filter_bool
