@@ -77,6 +77,7 @@ def submit_color():
     blue = int(blue)
     led_intensity = int(led_intensity)
     
+    
     red = max(0, red)
     red = min(255, red)
     green = max(0, green)
@@ -85,8 +86,6 @@ def submit_color():
     blue = min(255, blue)
     led_intensity = max(0, led_intensity)
     led_intensity = min(1, led_intensity)
-
-
 
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
