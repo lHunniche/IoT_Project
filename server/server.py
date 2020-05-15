@@ -61,15 +61,15 @@ def submit_color():
     blue = body.get("blue")
     led_intensity = body.get("led_intensity")
     board_id = body.get("board_id")
-    blue_light_filter_bool = body.get("blue_light_filter")
+    #blue_light_filter_bool = body.get("blue_light_filter")
 
     board = board_dict.get(board_id)
     if board == None:
         return "SubmitColor - No board available with that ID."
 
     # !!! DELETE WHEN BLUE LIGHT FILTER IS FULLY IMPLEMENTED !!!
-    if blue_light_filter_bool == None:
-        blue_light_filter_bool = False
+    #if blue_light_filter_bool == None:
+    #    blue_light_filter_bool = False
     # !!! DELETE WHEN BLUE LIGHT FILTER IS FULLY IMPLEMENTED !!!
 
     red = int(red)
@@ -90,7 +90,7 @@ def submit_color():
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.led_intensity = int(led_intensity)
-    board.blue_light_filter = blue_light_filter_bool
+    #board.blue_light_filter = blue_light_filter_bool
     board.has_update = True
     board_dict[board_id] = board
 
@@ -169,6 +169,20 @@ def get_board_info_raw():
 
     return jsonify(board.__dict__)
 
+
+
+@app.route("/togglebluelightfilter", methods=["POST"])
+def toggle_blue_light_filter():
+    body = get_body(request)
+    board_id = body.get("board_id")
+    board = board_dict.get(board_id)
+
+    if board == None:
+        return "ToggleBlueLightFilter - No board available with that ID."
+
+    board.blue_light_filter = not board.blue_light_filter
+
+    return "BlueLightFilter was toggled"
 
 
 
