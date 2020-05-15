@@ -146,13 +146,30 @@ def get_color_once():
     board = board_dict.get(board_id)
 
     if board == None:
-        return "GetCurrentColor - No board available with that ID."
+        return "GetBoardInfo - No board available with that ID."
     
     # perform any last minute adjustments before sending board off
     temp_board = copy.deepcopy(board)
     adjust_rgb_for_intensity(temp_board)
     adjust_rgb_for_blue_filter(temp_board)
     return jsonify(temp_board.__dict__)
+
+
+# GET RAW BOARD DARTA
+# REQUIRES:
+#   board_id
+
+@app.route("/getboardinforaw", methods=["GET"])
+def get_color_once():
+    board_id = request.args.get("board_id")
+    board = board_dict.get(board_id)
+
+    if board == None:
+        return "GetBoardInfo - No board available with that ID."
+
+    return jsonify(board)
+
+
 
 
 
