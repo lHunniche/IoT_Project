@@ -170,7 +170,11 @@ def get_board_info_raw():
     return jsonify(board.__dict__)
 
 
-
+# TOGGLES BLUE LIGHT FILTER (BOOLEAN) ON A BOARD 
+# REQUIRES:
+#   board_id
+# RETURNS:
+#   message
 @app.route("/togglebluelightfilter", methods=["POST"])
 def toggle_blue_light_filter():
     body = get_body(request)
