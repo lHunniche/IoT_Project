@@ -183,12 +183,11 @@ def toggle_blue_light_filter():
 
     if board == None:
         return "ToggleBlueLightFilter - No board available with that ID."
-
+    
     board.blue_light_filter = not board.blue_light_filter
+    return_body = {"blue_light_filter" : board.blue_light_filter}
 
-    return "BlueLightFilter was toggled"
-
-
+    return jsonify(return_body)
 
 
 # REQUIRES:
@@ -301,21 +300,21 @@ def get_boards():
 
 
 # return RGB values adjusted for brightness
-def adjust_rgb_for_intensity(board):
-    adjustment = board.led_intensity / 100
+def adjust_rgb_for_intensity(temp_board):
+    adjustment = temp_board.led_intensity / 100
 
-    board.color["red"] = int(board.color["red"] * adjustment)
-    board.color["green"] = int(board.color["green"] * adjustment)
-    board.color["blue"] = int(board.color["blue"] * adjustment)
+    temp_board.color["red"] = int(temp_board.color["red"] * adjustment)
+    temp_board.color["green"] = int(temp_board.color["green"] * adjustment)
+    temp_board.color["blue"] = int(temp_board.color["blue"] * adjustment)
     
-    return board
+    return temp_board
 
 
 # alter the RGB values for when blue light filtering is enabled
-def adjust_rgb_for_blue_filter(board):
-    if board.blue_light_filter:
-        board.color["blue"] = 0
-    return board
+def adjust_rgb_for_blue_filter(temp_board):
+    if temp_board.blue_light_filter:
+        temp_board.color["blue"] = 0
+    return temp_board
 
 
 
