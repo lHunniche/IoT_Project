@@ -167,7 +167,7 @@ def get_color_once():
     if board == None:
         return "GetBoardInfo - No board available with that ID."
 
-    return jsonify(board)
+    return jsonify(board.__dict__)
 
 
 
