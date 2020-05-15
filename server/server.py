@@ -208,14 +208,14 @@ def toggle_auto_light_mode():
     if setpoint != None:
         board.setpoint = setpoint
 
+    return_body = {"auto_adjust_light" : board.auto_adjust_light}
     if board.auto_adjust_light:
         board.led_intensity_before_auto = board.led_intensity
-        board.has_update = True
-        return "AutoLight enabled in " + board.name
     else:
         board.led_intensity = board.led_intensity_before_auto
-        board.has_update = True
-        return "AutoLight disabled in " + board.name
+        
+    board.has_update = True
+    return jsonify(return_body)
 
 
 # REQUIRES:
