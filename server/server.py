@@ -102,7 +102,7 @@ def update_board_state():
     board.has_update = True
 
     return_body = dict()
-    return_body["board"] = board
+    return_body["board"] = board.__dict__
     return_body["messages"] = return_message
 
     return jsonify(return_body)
