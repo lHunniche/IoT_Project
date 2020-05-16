@@ -87,6 +87,7 @@ def update_board_state():
     if auto_adjust_light == True:
         # this is True when auto-mode is selected, but no setpoint is provided
         if setpoint == None and board.auto_adjust_light == False:
+            auto_adjust_light = False
             return_message["auto_adjust_light_error"] = "Setpoint not provided when trying to start Auto-Mode."
     if setpoint == None:
         setpoint = board.setpoint
