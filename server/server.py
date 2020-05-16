@@ -47,6 +47,68 @@ def init_board():
     return jsonify(temp_dict)
 
 
+@app.route("/updateboardstate", methods=["POST"])
+def update_board_state():
+    body = get_body(request)
+    if body == None:
+        print("UpdateBoardState - No body included in POST request - response aborted.")
+        return "UpdateBoardState - No body included in POST request - response aborted."
+
+    board_id = body.get("board_id")
+    red = body.get("red")
+    green = body.get("green")
+    blue = body.get("blue")
+    led_intensity = body.get("led_intensity")
+    setpoint = body.get("setpoint")
+    blue_light_filter = body.get("blue_light_filter")
+    auto_adjust_light = body.get("auto_adjust_light")
+    return_message = dict()
+
+    board = board_dict[board_id]
+
+    if board == None:
+        print("Tried to update board that didn't exist - " + str(board_id))
+        return "UpdateBoardState - no board with that ID exists"
+
+    if red == None:
+        red = board.color["red"]
+        return_message["red_warning"] = "Red not provided - using board's current color instead."
+    if blue == None:
+        blue = board.color["blue"]
+        return_message["blue_warning"] = "Blue not provided - using board's current color instead."
+    if green == None:
+        green = board.color["green"]
+        return_message["green_warning"] = "Green not provided - using board's current color instead."
+    if led_intensity == None:
+        led_intensity = board.led_intensity
+        return_message["led_intensity_warning"] = "LED_intensity not provided - using board's current setting instead."
+    if blue_light_filter == None:
+        blue_light_filter = board.blue_light_filter
+        return_message["blue_light_filter_warning"] = "Blue Light Filter not provided - using board's current setting instead."
+    
+    if auto_adjust_light == True:
+        # this is True when auto-mode is selected, but no setpoint is provided
+        if setpoint == None and board.auto_adjust_light == False:
+            return_message["auto_adjust_light_error"] = "Setpoint not provided when trying to start Auto-Mode."
+        else:
+            board.setpoint = setpoint  
+    
+    board.color["red"] = red
+    board.color["blue"] = blue
+    board.color["green"] = green
+    board.led_intensity = led_intensity
+    board.blue_light_filter = blue_light_filter
+    board.auto_adjust_light = auto_adjust_light
+    board.has_update = True
+
+    return_body = dict()
+    return_body["board"] = board
+    return_body["messages"] = return_message
+
+    return jsonify(return_body.__dict__)
+
+
+
 # sends color from Android App to web server. 
 # Board ID must be submitted along with the request
 # colors are defined by an RGB value (255,255,255)
