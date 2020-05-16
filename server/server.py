@@ -6,7 +6,6 @@ from light_controller import light_actuator
 
 
 app = Flask(__name__)
-has_color_update = True
 board_dict = dict()
 color_long_polling = LongPolling(poll_renew = 10)
 debug = False
@@ -85,13 +84,11 @@ def update_board_state():
     if blue_light_filter == None:
         blue_light_filter = board.blue_light_filter
         return_message["blue_light_filter_warning"] = "Blue Light Filter not provided - using board's current setting instead."
-    
     if auto_adjust_light == True:
         # this is True when auto-mode is selected, but no setpoint is provided
         if setpoint == None and board.auto_adjust_light == False:
             return_message["auto_adjust_light_error"] = "Setpoint not provided when trying to start Auto-Mode."
-        else:
-            board.setpoint = setpoint  
+     
     
     board.color["red"] = red
     board.color["blue"] = blue
@@ -99,6 +96,7 @@ def update_board_state():
     board.led_intensity = led_intensity
     board.blue_light_filter = blue_light_filter
     board.auto_adjust_light = auto_adjust_light
+    board.setpoint = setpoint
     board.has_update = True
 
     return_body = dict()
@@ -333,7 +331,6 @@ def update_setpoint():
 #   message
 @app.route("/submitlightdata", methods=["POST"])
 def submit_light():
-    global has_color_update
     body = get_body(request)
     board_id = body.get("board_id")
     light = body.get("measured_light")
