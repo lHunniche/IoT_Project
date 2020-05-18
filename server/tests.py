@@ -38,7 +38,7 @@ def init(name, board_ids):
     response = post(urls["init"], {"name": name})
     board_id = response.json()["board_id"]
     board_ids.append(board_id)
-    print("Initting: ", name)
+    #printprint("Initting: ", name)
     return board_id
 
 
@@ -59,11 +59,11 @@ def init(name, board_ids):
 @settings(max_examples = 1)
 def submit_color(board_ids, red, green, blue, led_intensity, blue_light_filter):
     rand_board_index = random.SystemRandom().randint(0, len(board_ids) - 1)
-    print(len(board_ids))
+    #print(len(board_ids))
     board_id = board_ids[rand_board_index]
-    print(rand_board_index)
-    print(board_id, " chosen from ")
-    print(board_ids)
+    #print(rand_board_index)
+    #print(board_id, " chosen from ")
+    #print(board_ids)
     post(urls["submitcolor"], body ={
         "board_id": board_id,
         "red": red,
@@ -97,6 +97,7 @@ def submit_color(board_ids, red, green, blue, led_intensity, blue_light_filter):
 #@given()
 def get_updates(board_ids):
     print("Get Updates")
+    # with long polling, maybe later
     return None
 
 #/getcurrentcolor
@@ -105,24 +106,98 @@ def get_updates(board_ids):
 #@given()
 def get_current_color(board_ids):
     print("Get Current Color")
+    # trivial, just fetches board.
     return None
 
 #/toggleautolight
 # <board_id(String)>
 # <setpoint(Integer)>
 # Returns String message
-#@given()
-def toggle_auto_light(board_ids):
-    print("Toggle Auto Light")
+@given(placeholder = st.none())
+@settings(max_examples = 1)
+def toggle_auto_light(placeholder, board_ids):
+    #print("Toggle Auto Light")
+    rand_board_index = random.SystemRandom().randint(0, len(board_ids) - 1)
+    board_id = board_ids[rand_board_index]
+    url = urls["getboardinfo"] + "?board_id="+board_id
+    board_info_before = get(url).json()
+
+    auto_mode_before = board_info_before["auto_adjust_light"]
+    if auto_mode_before == True:
+        auto_mode_after = not auto_mode_before
+        current_setpoint = board_info_before["setpoint"]
+        current_led_intensity = board_info_before["led_intensity_before_auto"]
+
+        post(urls["toggleautolight"], body ={
+        "board_id": board_id,
+        "auto_adjust_light" : auto_mode_after,
+        "setpoint" : current_setpoint
+        })
+        
+        board_info_after = get(url).json()
+        auto_mode_new = board_info_after["auto_adjust_light"]
+        led_intensity_before_auto_new = board_info_after["led_intensity"]
+
+        assert(auto_mode_new == auto_mode_after)
+        assert(led_intensity_before_auto_new == current_led_intensity)
+
+        # ændre den til false, og tjek at det skete
+        # tjek at led_intensity bliver lig med led_intensity_before_auto
+    else:
+        auto_mode_after = not auto_mode_before
+        current_setpoint = board_info_before["setpoint"]
+        current_led_intensity = board_info_before["led_intensity"]
+
+        post(urls["toggleautolight"], body ={
+        "board_id": board_id,
+        "auto_adjust_light" : auto_mode_after,
+        "setpoint" : current_setpoint
+        })
+
+        board_info_after = get(url).json()
+        auto_mode_new = board_info_after["auto_adjust_light"]
+        led_intensity_before_auto_new = board_info_after["led_intensity_before_auto"]
+
+        assert(auto_mode_new == auto_mode_after)
+        assert(led_intensity_before_auto_new == current_led_intensity)
+        # ændre den til true, og tjek at det skete
+        # tjek at led_intensity_before_auto bliver sat lig med led_intensity
+
     return None
 
 #/autolightupdate
 # <board_id(String)>
 # <measured_light(Integer)>
 # Returns String message
-#@given()
-def auto_light_update(board_ids):
-    print("Auto Light Update")
+@given(measured_light = st.integers(max_value=1000000, min_value=-1000000))
+def auto_light_update(board_ids, measured_light):
+    #print("Auto Light Update")
+
+    # if measured_light < setpoint THEN led_intensity decreases ELSE led_intensity increases
+    rand_board_index = random.SystemRandom().randint(0, len(board_ids) - 1)
+    board_id = board_ids[rand_board_index]
+    url = urls["getboardinfo"] + "?board_id="+board_id
+    board_info_before = get(url).json()
+
+    initial_setpoint = board_info_before["setpoint"]
+    initial_led_intensity = board_info_before["led_intensity"]
+    post(urls["toggleautolight"], body ={
+        "board_id": board_id,
+        "measured_light" : measured_light
+        })
+    
+    board_info_after = get(url).json()
+    setpoint_after = board_info_after["setpoint"]
+    led_intensity_after = board_info_after["led_intensity"]
+
+    if abs(measured_light - initial_setpoint) < 10:
+        assert(initial_setpoint == setpoint_after)
+    elif measured_light < initial_setpoint:
+        assert(led_intensity_after < initial_led_intensity)
+    elif measured_light > initial_setpoint:
+        assert(led_intensity_after > initial_led_intensity)
+
+
     return None
 
 #/updatesetpoint
@@ -171,7 +246,7 @@ def command_lists(draw):
     command_list = []
     global commands
     command_list = draw(st.lists(commands_gen(), min_size=1, max_size=100))
-    for i in range(0,10):
+    for i in range(1):
         command_list.insert(i, commands[0])
     # command_list.insert(0, commands[0])
     return command_list

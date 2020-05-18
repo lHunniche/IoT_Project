@@ -6,7 +6,7 @@ class Board:
         self.name = name
         self.has_update = True
         self.auto_adjust_light = False
-        self.setpoint = None
+        self.setpoint = 200
         self.blue_light_filter = False
         self.led_intensity_before_auto = 50
 
