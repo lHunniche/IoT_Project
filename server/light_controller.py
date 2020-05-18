@@ -61,13 +61,11 @@ class light_actuator:
         new_led_intensity = 0
         
         if dist_to_setpoint > 0:
+            if led_intensity < 2:
+                led_intensity += 5
             new_led_intensity = led_intensity + led_intensity*act_value
         else:
             new_led_intensity = led_intensity - led_intensity*act_value
 
         board.led_intensity = min(int(new_led_intensity), 100)
         return board
-        
-            
-        
-        

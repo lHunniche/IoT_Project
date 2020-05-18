@@ -7,6 +7,8 @@ class Board:
         self.has_update = True
         self.auto_adjust_light = False
         self.setpoint = None
+        self.blue_light_filter = False
+        self.led_intensity_before_auto = 50
 
 
     def __str__(self):
