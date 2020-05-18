@@ -106,7 +106,7 @@ def get_updates(board_ids):
 # <board_id(String)>
 # Returns the board (with adjusted light intensity and blue light filter)
 #@given()
-def get_current_color(board_ids):
+def get_board_info(board_ids):
     print("Get Current Color")
     # trivial, just fetches board.
     return None
@@ -293,10 +293,10 @@ def toggle_blue_light_filter(placeholder, board_ids):
 
     if blue_light_filter_before:
         assert(blue_light_filter_after == False)
-        blue_value = board_info_after["color"]["blue"]
-        assert(blue_value == 0)
     else:
         assert(blue_light_filter_after == True)
+        blue_value = board_info_after["color"]["blue"]
+        assert(blue_value == 0)
 
 
 
@@ -305,12 +305,12 @@ def toggle_blue_light_filter(placeholder, board_ids):
 commands = [\
     init, \
     submit_color, \
-    get_updates, \
-    get_current_color, \
+    #get_updates, \
+    #get_board_info, \
     toggle_auto_light, \
     auto_light_update, \
     update_setpoint, \
-    submit_color, \
+    #submit_color, \
     boards, \
     toggle_blue_light_filter]
 
@@ -319,7 +319,7 @@ commands = [\
 def command_lists(draw):
     command_list = []
     global commands
-    command_list = draw(st.lists(commands_gen(), min_size=2, max_size=100))
+    command_list = draw(st.lists(commands_gen(), min_size=1))
     for i in range(1):
         command_list.insert(i, commands[0])
     # command_list.insert(0, commands[0])
@@ -333,9 +333,9 @@ def commands_gen(draw):
     i = draw(st.integers(min_value=0, max_value=len(commands) - 1))
     return commands[i]
 
-
+#,suppress_health_check=(HealthCheck.too_slow,)
 @given(command_list = command_lists(), name = st.text())
-@settings(deadline = 100000,suppress_health_check=(HealthCheck.too_slow,))
+@settings(deadline = 100000)
 def test_command_lists(command_list,name):
     board_ids = []
     print("_____________ NEW COMMANDS LIST _________________")
@@ -353,7 +353,6 @@ def test_command_lists(command_list,name):
 
 post(urls["reset"], body ={})
 test_command_lists()
-boards()
 
 
 
