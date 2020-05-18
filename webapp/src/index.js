@@ -23,7 +23,7 @@ $(document).ready(function () {
         }
     }
 
-    
+
     let addBoard = (boardContainer, board) => {
         let radio = document.createElement("div")
         radio.setAttribute("class", "radio")
@@ -38,7 +38,6 @@ $(document).ready(function () {
         radio.style.backgroundColor = "rgb(" + red + "," + green + "," + blue + ")"
         radio.style.color = light([red, green, blue]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
     }
-
 
 
 
@@ -63,6 +62,8 @@ $(document).ready(function () {
             .then((data) => {
                 addBoards(data)
             }).then(addEventListeners)
+            .then(updateSlidersAndBtns)
+            .catch(e => console.log("Couldnt fetch boards"))
     }
 
     let light = (color) => {
@@ -86,15 +87,18 @@ $(document).ready(function () {
         }
     }
 
+
     let updatePreview = () => {
         let preview = document.getElementById("rgb-preview")
+
         let percentDisplay = document.getElementById("percent-display")
         let rangePWM = document.getElementById("range-pwm").value
-        console.log(rangePWM)
         let previewHover = document.getElementById("hover-preview")
+
         let r = document.getElementById("range-red").value
         let g = document.getElementById("range-green").value
         let b = document.getElementById("range-blue").value
+
         let previewBG = "rgb(" + r + "," + g + "," + b + ")"
         let invertedColor = light([r, g, b]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
         percentDisplay.innerHTML = rangePWM + "%"
@@ -102,6 +106,8 @@ $(document).ready(function () {
         previewHover.style.color = invertedColor
         preview.style.backgroundColor = previewBG
     }
+
+
 
     let submitColor = () => {
         let r = parseInt(document.getElementById("range-red").value)
@@ -132,8 +138,6 @@ $(document).ready(function () {
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-
     }
 
     let initPreviewListener = () => {
@@ -142,7 +146,7 @@ $(document).ready(function () {
 
     let initRangeSliderListeners = () => {
         let sliders = ["range-red", "range-green", "range-blue", "range-pwm"]
-        for(slider of sliders) {
+        for (slider of sliders) {
             document.getElementById(slider).addEventListener("input", updatePreview)
         }
     }
@@ -150,13 +154,154 @@ $(document).ready(function () {
         $('.radio-group .radio').click(function () {
             $(this).parent().find('.radio').removeClass('selected');
             $(this).addClass('selected');
-            var val = $(this).attr('data-value');
+            boardId = this.id
+            updateSlidersAndBtns(boardId)
+            let val = $(this).attr('data-value');
             selected = val
         });
     }
 
+    let initRadioSetPointEventListener = () => {
+        $('.radio-group-setpoints .radio').click(function () {
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
+            boardId = this.id
+            updateSlidersAndBtns(boardId)
+            let val = $(this).attr('data-value');
+            selected = val
+        });
+    }
+
+    let updateSlidersAndBtns = (boardId) => {
+        fetch("http://klevang.dk:19409/boards?secret=QmGZADAipmhKsovsIhyQQcsTxgFkiy")
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                board = data["boards"].filter(board => board["board_id"] == boardId)[0]
+                color = board["color"]
+                nightMode = board["blue_light_filter"]
+                autoAdjust = board["auto_adjust_light"]
+                intensity = board[""]
+                updateSliders(color, intensity)
+                updateBtns(nightMode, autoAdjust)
+            })
+    }
+
+    let updateSliders = (color, intensity) => {
+        document.getElementById("range-red").value = color["red"]
+        document.getElementById("range-green").value = color["green"]
+        document.getElementById("range-blue").value = color["blue"]
+        document.getElementById("range-pwm").value = intensity
+        updatePreview()
+    }
+
+    let updateBtns = (nightMode, autoAdjust) => {
+        updateNightModeBtn(nightMode)
+        updateAutoAdjustBtn(autoAdjust)
+        
+    }
+
+    let updateNightModeBtn = (nightMode) => {
+        nightModeBtn = document.getElementById("btn-night-mode")
+        if (nightMode) {
+            nightModeBtn.setAttribute("class", "night-mode-on")
+        } else {
+            if (nightMode != undefined) {
+                nightModeBtn.classList.remove("night-mode-on")
+            }}
+    }
+
+    let updateAutoAdjustBtn = (autoAdjust) => {
+        autoAdjustBtn = document.getElementById("btn-auto-adjust")
+        if (autoAdjust) {
+            autoAdjustBtn.setAttribute("class", "auto-adjust-on")
+        } else {
+            if (autoAdjust != undefined) {
+                autoAdjust.classList.remove("auto-adjust-on")
+            }
+        }
+    }
+
+    let getSetpoint = () => {
+        let setPoints = document.querySelector(".radio-group-setpoints .radio")
+        let selected = setPoints.querySelector(".selected")
+        if(selected.length != 0) {
+            return setPoints[0].value
+        }
+        else {
+            let lastIndex = setPoints.length -1 
+            let highestSetpoint = setPoints[lastIndex]
+            highestSetpoint.setAttribute("class", "selected")
+            return highestSetpoint.value
+        }        
+    }
+
+
+
+
+    let initAutoAdjustBtnListener = () => {
+        let body ={
+            'board_id': selected,
+            'setpoint': getSetpoint()
+        }
+        $('#btn-night-mode').click(function () {
+            if (selected != -1) {
+                fetch("http://klevang.dk:19409/toggleautolight", {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body)
+                })
+                .then((response) => {
+                    return response.json();
+                }).then((response) => {
+                    updateAutoAdjustBtn(response["auto_adjust_light"])
+                }).catch((e) => {
+                    console.log(e)
+                })
+
+            }
+        })
+    }
+
+    let initNightModeBtnListener = () => {
+        let body ={
+            'board_id': selected
+        }
+        $('#btn-night-mode').click(function () {
+            if (selected != -1) {
+                fetch("http://klevang.dk:19409/togglebluelightfilter", {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body)
+                })
+                .then((response) => {
+                    return response.json();
+                }).then((response) => {
+                    updateNightModeBtn(response["blue_light_filter"])
+                }).catch((e) => {
+                    console.log(e)
+                })
+
+            }
+        })
+    }
+
+
+
+    
+
     let addEventListeners = () => {
         initRadioEventListener()
+        initRadioSetPointEventListener()
+        initNightModeBtnListener()
+        initAutoAdjustBtnListener()
         initRangeSliderListeners()
         initPreviewListener()
     }

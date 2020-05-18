@@ -129,9 +129,42 @@ h1{
 }
 
 
+
 /*______________*/
 
+/*_________ BUTTONS __________ */
 
+
+.container-setpoint {
+  color:black;
+  display: inline-block;
+  background-color: #ffaa;
+  padding: 5%;
+  margin-top: 7%;
+  width: 100%;
+  
+}
+#btn-auto-adjust{
+  background-color: white;
+  color: black;
+}
+
+.auto-adjust-on {
+  background-color: black;
+  color: white;
+}
+
+#btn-night-mode {
+  background-color: white;
+  color: black;
+}
+
+.night-mode-on {
+  background-color: black !important;
+  color:white !important;
+}
+
+/*____________________*/
 
 
 /* PREVIEW BOX */
@@ -170,6 +203,9 @@ h1{
 
 
 /*_____________________*/
+
+
+
 
 
 /* INPUT RANGE SLIDERS */
