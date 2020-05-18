@@ -67,5 +67,7 @@ class light_actuator:
         else:
             new_led_intensity = led_intensity - led_intensity*act_value
 
-        board.led_intensity = min(int(new_led_intensity), 100)
+        new_led_intensity = min(new_led_intensity, 100)
+        new_led_intensity = max(new_led_intensity, 0)
+
         return board

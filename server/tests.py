@@ -191,16 +191,33 @@ def auto_light_update(board_ids, measured_light):
     setpoint_after = board_info_after["setpoint"]
     led_intensity_after = board_info_after["led_intensity"]
 
+    print("----")
+    print("LED_INTENSITY_BEFORE: " + str(initial_led_intensity))
+    print("MEASURED LIGHT: " + str(measured_light))
+    print("LED_INTENSITY_AFTER: " + str(led_intensity_after))
+    
     dist_to_setpoint = initial_setpoint - measured_light
 
+    assert(led_intensity_after >= 0)
     if abs(dist_to_setpoint) < 10:
         assert(led_intensity_after == initial_led_intensity)
+        print("HEJ")
     elif measured_light < initial_setpoint:
-        assert(led_intensity_after > initial_led_intensity)
+        if initial_led_intensity == 100:
+            print("MED")
+            assert(led_intensity_after == 100)
+        else:
+            print("SUR")
+            assert(led_intensity_after > initial_led_intensity)
     elif measured_light > initial_setpoint:
-        assert(led_intensity_after < initial_led_intensity)
+        if initial_led_intensity == 0:
+            print("DIG")
+            assert(led_intensity_after == 0)
+        else:
+            print("KRYDSORD")
+            assert(led_intensity_after < initial_led_intensity)
 
-
+    print("----")
     return None
 
 #/updatesetpoint
