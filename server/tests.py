@@ -18,7 +18,8 @@ urls = {
     "updatesetpoint": base_url + "/updatesetpoint",
     "submitlightdata": base_url + "/submitlightdata",
     "boards": base_url + "/boards",
-    "getboardinfo": base_url + "/getboardinfo"
+    "getboardinfo": base_url + "/getboardinfo",
+    "reset": base_url + "/reset"
 }
 
 
@@ -169,7 +170,7 @@ def toggle_auto_light(placeholder, board_ids):
 # <board_id(String)>
 # <measured_light(Integer)>
 # Returns String message
-@given(measured_light = st.integers(max_value=1000000, min_value=-1000000))
+@given(measured_light = st.integers(max_value=10000, min_value=0))
 def auto_light_update(board_ids, measured_light):
     #print("Auto Light Update")
 
@@ -181,7 +182,7 @@ def auto_light_update(board_ids, measured_light):
 
     initial_setpoint = board_info_before["setpoint"]
     initial_led_intensity = board_info_before["led_intensity"]
-    post(urls["toggleautolight"], body ={
+    post(urls["autolightupdate"], body ={
         "board_id": board_id,
         "measured_light" : measured_light
         })
@@ -190,12 +191,14 @@ def auto_light_update(board_ids, measured_light):
     setpoint_after = board_info_after["setpoint"]
     led_intensity_after = board_info_after["led_intensity"]
 
-    if abs(measured_light - initial_setpoint) < 10:
-        assert(initial_setpoint == setpoint_after)
+    dist_to_setpoint = initial_setpoint - measured_light
+
+    if abs(dist_to_setpoint) < 10:
+        assert(led_intensity_after == initial_led_intensity)
     elif measured_light < initial_setpoint:
-        assert(led_intensity_after < initial_led_intensity)
-    elif measured_light > initial_setpoint:
         assert(led_intensity_after > initial_led_intensity)
+    elif measured_light > initial_setpoint:
+        assert(led_intensity_after < initial_led_intensity)
 
 
     return None
@@ -277,7 +280,7 @@ def test_command_lists(command_list,name):
     print("\n\n__________________________________________________\n\n")
 
 
-
+post(urls["reset"], body ={})
 test_command_lists()
 
 

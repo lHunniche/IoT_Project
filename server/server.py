@@ -379,6 +379,13 @@ def adjust_rgb_for_blue_filter(temp_board):
     return temp_board
 
 
+@app.route("/reset", methods=["POST"])
+def reset_board_dict():
+    global board_dict
+    board_dict = dict()
+
+    return "You just wiped our board dict, thank you very much."
+
 
 
 
