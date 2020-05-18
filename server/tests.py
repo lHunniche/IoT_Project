@@ -194,6 +194,8 @@ def auto_light_update(board_ids, measured_light):
     print("----")
     print("LED_INTENSITY_BEFORE: " + str(initial_led_intensity))
     print("MEASURED LIGHT: " + str(measured_light))
+    print("INITIAL SETPOINT: " + str(initial_setpoint))
+    print("AFTER SETPOINT: " + str(setpoint_after))
     print("LED_INTENSITY_AFTER: " + str(led_intensity_after))
     
     dist_to_setpoint = initial_setpoint - measured_light

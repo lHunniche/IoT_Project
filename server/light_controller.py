@@ -69,5 +69,5 @@ class light_actuator:
 
         new_led_intensity = min(new_led_intensity, 100)
         new_led_intensity = max(new_led_intensity, 0)
-
+        board.led_intensity = new_led_intensity
         return board
