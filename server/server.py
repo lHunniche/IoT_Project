@@ -124,7 +124,7 @@ def submit_color():
     blue = body.get("blue")
     led_intensity = body.get("led_intensity")
     board_id = body.get("board_id")
-    #blue_light_filter_bool = body.get("blue_light_filter")
+    blue_light_filter_bool = body.get("blue_light_filter")
 
     board = board_dict.get(board_id)
     if board == None:
@@ -153,7 +153,7 @@ def submit_color():
 
     board.color = {"red" : int(red), "green" : int(green), "blue" : int(blue)}
     board.led_intensity = int(led_intensity)
-    #board.blue_light_filter = blue_light_filter_bool
+    board.blue_light_filter = blue_light_filter_bool
     board.has_update = True
     board_dict[board_id] = board
 
