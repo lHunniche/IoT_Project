@@ -45,7 +45,13 @@ def init_board():
         print("All went well!")
     return jsonify(temp_dict)
 
-
+# REQUIRES
+#   board_id
+#   red, green, blue
+#   led_intensity
+#   setpoint
+#   blue_light_filter
+#   auto_adjust_light (dependant on setpoint)
 @app.route("/updateboardstate", methods=["POST"])
 def update_board_state():
     body = get_body(request)
@@ -166,6 +172,7 @@ def get_color():
     global board_dict
     body = get_body(request)
     board_id = body.get("board_id")
+    lux_in_room = body.get("lux_in_room")
 
     board = board_dict.get(board_id)
     if board == None:
@@ -175,7 +182,7 @@ def get_color():
 
     if color_long_polling.is_polling(board_id):
         wait_counter = 0
-        while wait_counter < 30:
+        while wait_counter < 10:
             if debug:
                 print(board_id + ": waiting for new color...")
             if board_dict.get(board_id).has_update:
@@ -192,6 +199,7 @@ def get_color():
     
     updated_board = board_dict.get(board_id)
     updated_board.has_update = False
+    updated_board.lux_in_room = lux_in_room
     board_dict[board_id] = updated_board
 
     # perform any last minute adjustments before sending board off

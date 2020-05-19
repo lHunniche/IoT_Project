@@ -9,6 +9,7 @@ class Board:
         self.setpoint = 200
         self.blue_light_filter = False
         self.led_intensity_before_auto = 50
+        self.lux_in_room = 0
 
 
     def __str__(self):
