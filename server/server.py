@@ -69,6 +69,10 @@ def update_board_state():
     auto_adjust_light = body.get("auto_adjust_light")
     return_message = dict()
 
+    print("auto_adjust_light: " + str(auto_adjust_light))
+    print("blue_light_filter: " + str(blue_light_filter))
+
+
     board = board_dict[board_id]
 
     if board == None:
