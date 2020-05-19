@@ -108,6 +108,8 @@ def update_board_state():
     board.setpoint = setpoint
     board.has_update = True
 
+    print("Type of auto_adjust_light: " + type(auto_adjust_light))
+
     return_body = dict()
     return_body["board"] = board.__dict__
     return_body["messages"] = return_message
