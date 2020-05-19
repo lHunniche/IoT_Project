@@ -99,18 +99,14 @@ def update_board_state():
         setpoint = board.setpoint
         return_message["setpoint_warning"] = "Setpoint not provided - current board's current setting instead."
     
-    board.color["red"] = red
-    board.color["blue"] = blue
-    board.color["green"] = green
-    board.led_intensity = led_intensity
-    board.blue_light_filter = blue_light_filter
-    board.auto_adjust_light = auto_adjust_light
-    board.setpoint = setpoint
+    board.color["red"] = int(red)
+    board.color["blue"] = int(blue)
+    board.color["green"] = int(green)
+    board.led_intensity = int(led_intensity)
+    board.blue_light_filter = bool(blue_light_filter)
+    board.auto_adjust_light = bool(auto_adjust_light) 
+    board.setpoint = int(setpoint)
     board.has_update = True
-
-    type_of = type(auto_adjust_light)
-
-    print("Type of auto_adjust_light: " + str(type_of))
 
     return_body = dict()
     return_body["board"] = board.__dict__
