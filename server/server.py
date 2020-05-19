@@ -69,8 +69,8 @@ def update_board_state():
     auto_adjust_light = body.get("auto_adjust_light")
     return_message = dict()
 
-    print("auto_adjust_light: " + str(auto_adjust_light))
-    print("blue_light_filter: " + str(blue_light_filter))
+    #print("auto_adjust_light: " + str(auto_adjust_light))
+    #print("blue_light_filter: " + str(blue_light_filter))
 
 
     board = board_dict[board_id]
@@ -108,11 +108,8 @@ def update_board_state():
     board.color["blue"] = int(blue)
     board.color["green"] = int(green)
     board.led_intensity = int(led_intensity)
-    print("what is blue light filter???")
-    print(blue_light_filter)
-    print(bool(blue_light_filter))
-    board.blue_light_filter = bool(blue_light_filter)
-    board.auto_adjust_light = bool(auto_adjust_light) 
+    board.blue_light_filter = blue_light_filter
+    board.auto_adjust_light = auto_adjust_light
     board.setpoint = int(setpoint)
     board.has_update = True
 
