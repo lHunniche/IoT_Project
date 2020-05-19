@@ -108,7 +108,9 @@ def update_board_state():
     board.setpoint = setpoint
     board.has_update = True
 
-    print("Type of auto_adjust_light: " + type(auto_adjust_light))
+    type_of = type(auto_adjust_light)
+
+    print("Type of auto_adjust_light: " + str(type_of))
 
     return_body = dict()
     return_body["board"] = board.__dict__
