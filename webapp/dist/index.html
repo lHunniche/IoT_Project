@@ -36,13 +36,16 @@
                 <input type="range" id="range-blue" name="vol" min="0" max="255">
                 <label>Intensity</label>
                 <input type="range" name="s1" min="0" max="100"  id="range-pwm">
-                <input type="button" on=false class="toggle" value="Auto Adjust"  id="btn-auto-adjust" >
-                <input type="button" on=false class="toggle" value="Night Mode" id="btn-night-mode">
+                <!--<input type="button" on=false class="toggle" value="Auto Adjust"  id="btn-auto-adjust" > 
+                <input type="button" on=false class="toggle" value="Night Mode" id="btn-night-mode">-->
+                <button id="btn-auto-adjust" value=false>Auto Adjust</button>
+                <button id="btn-night-mode" value=false>Night Mode</button>
             <div class="container-setpoint">
                 <p>Setpoint</p>
-                <div class="container-setpoint-btns radio-group-setpoints">
+                <div class="container-setpoint-btns radio-group-setpoints" id="setpoints">
                     <div value=100 class="radio">100</div>
-                    <div value=300 class="radio">300</div>
+                    <div value=200 class="radio">200</div>
+                    <div value=400 class="radio">400</div>
                     <div value=600 class="radio">600</div>
                 </div>
             </div>
