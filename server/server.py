@@ -92,6 +92,7 @@ def update_board_state():
         led_intensity = board.led_intensity
         return_message["led_intensity_warning"] = "LED_intensity not provided - using board's current setting instead."
     if blue_light_filter == None:
+        print("Blue light filter was None")
         blue_light_filter = board.blue_light_filter
         return_message["blue_light_filter_warning"] = "Blue Light Filter not provided - using board's current setting instead."
     if auto_adjust_light == True:
@@ -107,6 +108,9 @@ def update_board_state():
     board.color["blue"] = int(blue)
     board.color["green"] = int(green)
     board.led_intensity = int(led_intensity)
+    print("what is blue light filter???")
+    print(blue_light_filter)
+    print(bool(blue_light_filter))
     board.blue_light_filter = bool(blue_light_filter)
     board.auto_adjust_light = bool(auto_adjust_light) 
     board.setpoint = int(setpoint)
