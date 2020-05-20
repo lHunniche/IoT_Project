@@ -256,7 +256,6 @@ def submit_light_data(board_ids):
 @given(placeholder = st.none())
 @settings(max_examples = 1)
 def boards(placeholder, board_ids):
-    #print("Boards")
     url = urls["boards"] + "?secret=QmGZADAipmhKsovsIhyQQcsTxgFkiy"
     all_boards = get(url).json()
     for board in all_boards["boards"]:
@@ -310,7 +309,6 @@ commands = [\
     toggle_auto_light, \
     auto_light_update, \
     update_setpoint, \
-    #submit_color, \
     boards, \
     toggle_blue_light_filter]
 
@@ -328,7 +326,6 @@ def command_lists(draw):
 
 @st.composite
 def commands_gen(draw):
-    global commands
     #TODO: Ask Jan about random generator
     i = draw(st.integers(min_value=0, max_value=len(commands) - 1))
     return commands[i]
