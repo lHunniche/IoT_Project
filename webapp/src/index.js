@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     let selected = -1
 
@@ -7,11 +6,10 @@ $(document).ready(function () {
         let boardContainer = document.getElementById("radio-group-boards")
         let boards = data["boards"]
         for (i = 0; i < boards.length; i++) {
-            console.log("A BOARD: ")
-            console.log(boards[i])
             addBoard(boardContainer, boards[i])
         }
         selectFirstBoard()
+        selectBoard()
     }
 
     let selectFirstBoard = () => {
@@ -23,7 +21,7 @@ $(document).ready(function () {
         }
     }
 
-    
+
     let addBoard = (boardContainer, board) => {
         let radio = document.createElement("div")
         radio.setAttribute("class", "radio")
@@ -42,19 +40,6 @@ $(document).ready(function () {
 
 
 
-    let setBoardColor = (boardId, color) => {
-        console.log("Trying to color ")
-        console.log(boardId)
-        console.log(color)
-        let boardRadioBtn = document.getElementById(boardId)
-
-        let rgbString = "rgb(" + color['red'] + "," + color['green'] + "," + color['blue'] + ")"
-        let fontColor = light([color['red'], color['green'], color['blue']]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
-        boardRadioBtn.style.backgroundColor = rgbString
-        boardRadioBtn.style.color = fontColor
-    }
-
-
     let initBoards = () => {
         fetch('http://klevang.dk:19409/boards?secret=QmGZADAipmhKsovsIhyQQcsTxgFkiy')
             .then((response) => {
@@ -63,6 +48,8 @@ $(document).ready(function () {
             .then((data) => {
                 addBoards(data)
             }).then(addEventListeners)
+            .then(updateUI)
+            .catch(e => console.log("Couldnt fetch boards"))
     }
 
     let light = (color) => {
@@ -86,76 +73,186 @@ $(document).ready(function () {
         }
     }
 
-    let updatePreview = () => {
-        let preview = document.getElementById("rgb-preview")
-        let previewHover = document.getElementById("hover-preview")
-        let r = document.getElementById("range-red").value
-        let g = document.getElementById("range-green").value
-        let b = document.getElementById("range-blue").value
-        let previewBG = "rgb(" + r + "," + g + "," + b + ")"
-        let invertedColor = light([r, g, b]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
-        previewHover.style.color = invertedColor
-        preview.style.backgroundColor = previewBG
-    }
-
-    let submitColor = () => {
-        let r = parseInt(document.getElementById("range-red").value)
-        let g = parseInt(document.getElementById("range-green").value)
-        let b = parseInt(document.getElementById("range-blue").value)
-        let boardID = selected
-        setBoardColor(boardID, { "red": r, "green": g, "blue": b })
-        let colorData = {
-            "board_id": boardID,
-            "red": r,
-            "green": g,
-            "blue": b
-        }
-        fetch('http://klevang.dk:19409/submitcolor', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(colorData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-            })
-            .then(setBoardColor(colorData["board_id"], colorData))
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-
-
-    }
-
-    let initPreviewListener = () => {
-        document.getElementById("hover-preview").addEventListener('click', submitColor)
-    }
-
     let initRangeSliderListeners = () => {
-        document.getElementById("range-red").addEventListener("input", updatePreview)
-        document.getElementById("range-green").addEventListener("input", updatePreview)
-        document.getElementById("range-blue").addEventListener("input", updatePreview)
+        let sliders = ["range-red", "range-green", "range-blue", "range-pwm"]
+        for (slider of sliders) {
+            document.getElementById(slider).addEventListener("input", updatePreviewUI)
+        }
     }
     let initRadioEventListener = () => {
         $('.radio-group .radio').click(function () {
             $(this).parent().find('.radio').removeClass('selected');
             $(this).addClass('selected');
-            var val = $(this).attr('data-value');
+            boardId = this.id
+            let val = $(this).attr('data-value');
             selected = val
+            selectBoard()
         });
+    }
+
+
+    let selectBoard = () => {
+        fetch("http://klevang.dk:19409/getboardinforaw?board_id=" + selected)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => updateUI(response))
+    }
+
+    let updateUI = (board) => {
+        console.log(board)
+        let color = board["color"]
+        let r = color["red"]
+        let g = color["green"]
+        let b = color["blue"]
+        let intensity = board["led_intensity"]
+        let autoAdjust = JSON.parse(board["auto_adjust_light"])
+        let nightMode = JSON.parse(board["blue_light_filter"])
+        let setpoint = board["setpoint"]
+        //console.log(autoAdjust)
+        //console.log(nightMode)
+        updateSlidersUI(r, g, b, intensity)
+        updateToggleBtnsUI(autoAdjust, nightMode)
+        updateSetPointUI(setpoint)
+        updatePreviewUI()
+    }
+
+    let updateSlidersUI = (r, g, b, intensity) => {
+        document.getElementById("range-red").value = r
+        document.getElementById("range-green").value = g
+        document.getElementById("range-blue").value = b
+        document.getElementById("range-pwm").value = intensity
+    }
+
+    let updateToggleBtnsUI = (autoAdjust, nightMode) => {
+        updateNightModeBtnUI(nightMode)
+        updateAutoAdjustBtnUI(autoAdjust)
+    }
+    let updateNightModeBtnUI = (nightMode) => {
+        let btnNight = $("#btn-night-mode")
+        nightMode ? btnNight.attr("class", "night-mode-on") : btnNight.removeClass("night-mode-on")
+    }
+
+    let updateAutoAdjustBtnUI = (autoAdjust) => {
+        let btnAutoAdjust = $("#btn-auto-adjust")
+        autoAdjust ? btnAutoAdjust.attr("class", "auto-adjust-on") : btnAutoAdjust.removeClass("auto-adjust-on")
+    }
+
+    let updatePreviewUI = () => {
+        let preview = document.getElementById("rgb-preview")
+        let percentDisplay = document.getElementById("percent-display")
+        let rangePWM = document.getElementById("range-pwm").value
+        let previewHover = document.getElementById("hover-preview")
+
+        let r = document.getElementById("range-red").value
+        let g = document.getElementById("range-green").value
+        let b = document.getElementById("range-blue").value
+
+        let previewBG = "rgb(" + r + "," + g + "," + b + ")"
+        let invertedColor = light([r, g, b]) ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
+        percentDisplay.innerHTML = rangePWM + "%"
+        percentDisplay.style.color = invertedColor
+        previewHover.style.color = invertedColor
+        preview.style.backgroundColor = previewBG
+    }
+
+    let updateSetPointUI = (setpoint) => {
+        for (setpoint in document.getElementById("setpoints")) {
+            if (setpoint.value == setpoint) {
+
+            }
+        }
+    }
+
+    let addAutoAdjustListener = () => {
+        $("#btn-auto-adjust").click(function () {
+            let currState = $(this).attr("value")
+            let newState = !JSON.parse(currState)
+            $(this).attr("value", newState)
+            updateState()
+        })
+    }
+
+    let addNightModeListener = () => {
+        $("#btn-night-mode").click(function () {
+            let currState = $(this).attr("value")
+            let newState = !JSON.parse(currState)
+            $(this).attr("value", newState)
+            updateState()
+        })
+    }
+
+    let init = () => {
+        initBoards()
     }
 
     let addEventListeners = () => {
         initRadioEventListener()
+        initRadioSetPointEventListener()
+        addAutoAdjustListener()
+        addNightModeListener()
+        addSubmitColorListener()
         initRangeSliderListeners()
-        initPreviewListener()
     }
 
-    updatePreview()
-    initBoards()
+    let initRadioSetPointEventListener = () => {
+        $('.radio-group-setpoints .radio').click(function () {
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
+            boardId = this.id
+            let val = $(this).attr('data-value');
+            selected = val
+        });
+    }
+
+    let addSubmitColorListener = () => {
+        document.getElementById("hover-preview").addEventListener("click", function () {
+            updateState()
+        })
+    }
 
 
-});
+    let getSetPoint = () => {
+        return 200
+    }
 
+
+    let updateState = () => {
+        let boardId = selected
+        let red = document.getElementById("range-red").value
+        let green = document.getElementById("range-green").value
+        let blue = document.getElementById("range-blue").value
+        let intensity = document.getElementById("range-pwm").value
+        let auto_adjust_light = document.getElementById("btn-auto-adjust").value
+        let blue_light_filter = document.getElementById("btn-night-mode").value
+        let set_point = getSetPoint()
+        let updatedState = {
+            "board_id": boardId,
+            "red": red,
+            "green": green,
+            "blue": blue,
+            "led_intensity": intensity,
+            "blue_light_filter": blue_light_filter,
+            "auto_adjust_light": auto_adjust_light,
+            "setpoint": set_point
+
+        }
+        fetch("http://klevang.dk:19409/updateboardstate", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedState)
+        })
+            .then((response) => {
+                return response.json()
+            }).then((response) => {
+                console.log(response)
+                updateUI(response["board"])
+            })
+    }
+
+    init()
+
+})

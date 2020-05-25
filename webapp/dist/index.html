@@ -23,10 +23,10 @@
 
 <body>
 
-    <h1 class="hidden-xs hidden-sm visible-md" id="title">lighthearted light bulb</h1>
+    <!--<h1 class="hidden-xs hidden-sm visible-md" id="title">lighthearted light bulb</h1>-->
     <div class="content row">
         <div class="col-xs-12 col-md-3" id="color-change-container">
-            <h1>Set Your💡Color</h1>
+            <!--<h1>Set Your💡Color</h1>-->
             <form class="radio-group" id="radio-group-boards"></form>
             <div id="sliders-container">
                 <input type="range" id="range-red" name="vol" min="0" max="255">
@@ -34,17 +34,31 @@
                 <input type="range" id="range-green" name="vol" min="0" max="255">
 
                 <input type="range" id="range-blue" name="vol" min="0" max="255">
+                <label>Intensity</label>
+                <input type="range" name="s1" min="0" max="100"  id="range-pwm">
+                <!--<input type="button" on=false class="toggle" value="Auto Adjust"  id="btn-auto-adjust" > 
+                <input type="button" on=false class="toggle" value="Night Mode" id="btn-night-mode">-->
+                <button id="btn-auto-adjust" value=false>Auto Adjust</button>
+                <button id="btn-night-mode" value=false>Night Mode</button>
+            <div class="container-setpoint">
+                <p>Setpoint</p>
+                <div class="container-setpoint-btns radio-group-setpoints" id="setpoints">
+                    <div value=100 class="radio">100</div>
+                    <div value=200 class="radio">200</div>
+                    <div value=400 class="radio">400</div>
+                    <div value=600 class="radio">600</div>
+                </div>
+            </div>
+
 
             </div>
             <div id="rgb-preview">
-                <div id="hover-preview">Set Color</div>
+                <div id="hover-preview">Set Color</div><div id="percent-display"></div>
             </div>
 
 
         </div>
-        <div class="chart-container col-md-6 col-xs-12">
-       
-        </div>
+        <!--        <div class="chart-container col-md-6 col-xs-12"></div>
         <div class="board-options-container col-md-3 col-xs-12">
             <h1>Maybe some options for the different boards here.</h1>
         </div>
@@ -56,7 +70,7 @@
                 <h1>Other products</h1>
             </div>
         </div>
-        <!--
+        
         <div class="container" id="chart-container"><canvas id="my-chart"></canvas></div>
     -->
     </div>

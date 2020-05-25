@@ -78,9 +78,11 @@ h1{
  #color-change-container{
    text-align: center;;
    border: 3px solid beige;
-   margin-top: 0px;
+   margin-top: 3%;
+   margin-left: 28%;
    background-color: #065465;
    padding: 5%;
+   min-width: 800px;
 
  }
 
@@ -129,9 +131,42 @@ h1{
 }
 
 
+
 /*______________*/
 
+/*_________ BUTTONS __________ */
 
+
+.container-setpoint {
+  color:black;
+  display: inline-block;
+  background-color: #ffaa;
+  padding: 5%;
+  margin-top: 7%;
+  width: 100%;
+  
+}
+#btn-auto-adjust{
+  background-color: white;
+  color: black;
+}
+
+.auto-adjust-on {
+  background-color: black !important;
+  color: white !important;
+}
+
+#btn-night-mode {
+  background-color: white;
+  color: black;
+}
+
+.night-mode-on {
+  background-color: black !important;
+  color:white !important;
+}
+
+/*____________________*/
 
 
 /* PREVIEW BOX */
@@ -170,6 +205,9 @@ h1{
 
 
 /*_____________________*/
+
+
+
 
 
 /* INPUT RANGE SLIDERS */
@@ -308,4 +346,7 @@ input[type=range]::-webkit-slider-thumb {
 
   #range-blue::-webkit-slider-runnable-track {
     background: #31A9B8;
+  }
+  #range-pwm::-webkit-slider-runnable-track {
+    background: #FFFFFF;
   }
