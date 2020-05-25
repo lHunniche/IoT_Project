@@ -78,8 +78,10 @@ def recieve_input():
     global board_id
     global auto_adjust
     global setpoint
+    light = lt.light()[0]
     body = {
-        'board_id': board_id
+        'board_id': board_id,
+        'lux_in_room': light
     }
     res = urequests.post(get_color_url, json=body)
     print(res.status_code)
