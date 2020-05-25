@@ -188,13 +188,6 @@ def auto_light_update(board_ids, measured_light):
     board_info_after = get(url).json()
     setpoint_after = board_info_after["setpoint"]
     led_intensity_after = board_info_after["led_intensity"]
-
-    #print("----")
-    #print("LED_INTENSITY_BEFORE: " + str(initial_led_intensity))
-    #print("MEASURED LIGHT: " + str(measured_light))
-    #print("INITIAL SETPOINT: " + str(initial_setpoint))
-    #print("AFTER SETPOINT: " + str(setpoint_after))
-    #print("LED_INTENSITY_AFTER: " + str(led_intensity_after))
     
     dist_to_setpoint = initial_setpoint - measured_light
 
@@ -202,23 +195,16 @@ def auto_light_update(board_ids, measured_light):
     assert(led_intensity_after <= 100)
     if abs(dist_to_setpoint) < 10:
         assert(led_intensity_after == initial_led_intensity)
-        #print("HEJ")
     elif measured_light < initial_setpoint:
         if initial_led_intensity == 100:
-            #print("MED")
             assert(led_intensity_after == 100)
         else:
-            #print("SUR")
             assert(led_intensity_after > initial_led_intensity)
     elif measured_light > initial_setpoint:
         if initial_led_intensity == 0:
-            #print("DIG")
             assert(led_intensity_after == 0)
         else:
-            #print("KRYDSORD")
             assert(led_intensity_after < initial_led_intensity)
-
-    #print("----")
 
 #/updatesetpoint
 # <board_id(String)>
@@ -256,7 +242,6 @@ def submit_light_data(board_ids):
 @given(placeholder = st.none())
 @settings(max_examples = 1)
 def boards(placeholder, board_ids):
-    #print("Boards")
     url = urls["boards"] + "?secret=QmGZADAipmhKsovsIhyQQcsTxgFkiy"
     all_boards = get(url).json()
     for board in all_boards["boards"]:
@@ -310,7 +295,6 @@ commands = [\
     toggle_auto_light, \
     auto_light_update, \
     update_setpoint, \
-    #submit_color, \
     boards, \
     toggle_blue_light_filter]
 
@@ -328,7 +312,6 @@ def command_lists(draw):
 
 @st.composite
 def commands_gen(draw):
-    global commands
     #TODO: Ask Jan about random generator
     i = draw(st.integers(min_value=0, max_value=len(commands) - 1))
     return commands[i]
