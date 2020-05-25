@@ -1,14 +1,9 @@
 package com.example.iotapplication;
 
 public class RGBModel {
-    private Integer board_id;
-    private Integer red;
-    private Integer green;
-    private Integer blue;
-
-    public int getId() { return board_id; }
-
-    public void setBoard_id(Integer board_id) { this.board_id = board_id; }
+    private int red;
+    private int green;
+    private int blue;
 
     public int getRed() {
         return red;
@@ -32,5 +27,14 @@ public class RGBModel {
 
     public void setBlue(int blue) {
         this.blue = blue;
+    }
+
+    @Override
+    public String toString() {
+        return "RGBModel{" +
+                "red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                '}';
     }
 }
