@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/lHunniche/IoT_Project#readme",
   "dependencies": {
-    "chart.js": "^2.9.3"
+    "chart.js": "^2.9.4"
   },
   "devDependencies": {
     "webpack": "^4.42.1",
